@@ -6,6 +6,7 @@ from app.formatter import Formatter
 
 
 class ZoneNotFoundException(Exception):
+    """Zone Not Found Exception"""
     pass
 
 

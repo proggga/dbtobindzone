@@ -24,11 +24,13 @@ class Formatter(object):
 
     @staticmethod
     def format_line(max_sizes_by_columns, line):
+        """Format lines with by sizes table"""
         defaultoffset = 4
         result_line = ""
         for index, word in enumerate(line):
             if index < len(line) - 1:
-                result_line += word.ljust(max_sizes_by_columns[index] + defaultoffset)
+                result_line += word.ljust(max_sizes_by_columns[index]
+                                          + defaultoffset)
             else:
                 result_line += word
         result_line += '\n'
@@ -36,12 +38,17 @@ class Formatter(object):
 
     @staticmethod
     def collect_max_for_column(array_of_lines):
+        """collect max line words by column"""
         array_with_sizes_of_words = []
         for line_array in array_of_lines:
             lines_sizes = Formatter.get_words_sizes(line_array)
             array_with_sizes_of_words.append(lines_sizes)
-        return [max([i for i in word_len if i is not None]) for word_len in zip_longest(*array_with_sizes_of_words)]
+        zipped = zip_longest(*array_with_sizes_of_words)
+        zipped_without_none = [[i for i in word_len if i is not None]
+                               for word_len in zipped]
+        return [max(words) for words in zipped_without_none]
 
     @staticmethod
     def get_words_sizes(words_array):
+        """Get word sizes array"""
         return [len(word) for word in words_array]
