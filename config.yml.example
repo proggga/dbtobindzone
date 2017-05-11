@@ -1,0 +1,13 @@
+config:
+    connection:
+        host: example.host
+        port: 3306
+        user: username
+        password: password
+        database: database
+    dns:
+        path: /var/named/chroot/etc/m/
+        inner: True
+    zones:
+        - zone1.ru
+        - zone2.com

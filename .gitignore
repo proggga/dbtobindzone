@@ -1,0 +1,6 @@
+*.pyc
+config.yml
+.coverage
+.*__pycache__
+test_m
+.cache
