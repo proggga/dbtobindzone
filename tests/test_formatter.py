@@ -31,10 +31,10 @@ class TestFormatter(unittest.TestCase):
         '''test sort input with wrong columns and long words'''
         result = Formatter.sort_by_column([
             ['serv1', 'in', 'A', '10.0.0.1'],
-            ['fqdn.server2.org', 'longword']
+            ['fqdn.server2.org', 'word']
         ])
-        self.assertEqual(result, "serv1               in          A    10.0.0.1\n"
-                                 "fqdn.server2.org    longword\n")
+        self.assertEqual(result, "serv1               in      A    10.0.0.1\n"
+                                 "fqdn.server2.org    word\n")
 
     def test_sort_empty_lines(self):
         '''test sort inpurt with empty line'''
@@ -62,3 +62,24 @@ class TestFormatter(unittest.TestCase):
         '''empty array is input for test'''
         result = Formatter.sort_by_column([])
         self.assertEqual(result, "")
+
+    def test_sort_string(self):
+        """test format simple example"""
+        result = Formatter.sort_str_by_column("longword short same\n"
+                                              "small longword same\n")
+        self.assertEqual(result, "longword    short       same\n"
+                                 "small       longword    same\n")
+
+    def test_sort_str_with_spaces(self):
+        """test format with many spaces in input"""
+        result = Formatter.sort_str_by_column("  a   bbbb  \n"
+                                              "ccc  ee   \n")
+        self.assertEqual(result, "a      bbbb\n"
+                                 "ccc    ee\n")
+
+    def test_sort_str_with_many_newline(self):
+        """test format with two new lines in input"""
+        result = Formatter.sort_str_by_column("a b\n\ncc dd\n")
+        self.assertEqual(result, "a     b\n"
+                                 "\n"
+                                 "cc    dd\n")

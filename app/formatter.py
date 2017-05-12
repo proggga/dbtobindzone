@@ -1,4 +1,5 @@
 """Formatter, helps format by columns"""""
+import re
 try:
     # Python 3
     from itertools import zip_longest
@@ -9,6 +10,23 @@ except ImportError:
 
 class Formatter(object):
     """Main formatter class"""
+
+    @staticmethod
+    def sort_str_by_column(string_to_sort):
+        """Format string method by columns"""
+        lines = string_to_sort.split('\n')
+        if lines and lines[-1] == '':
+            lines.pop()
+        lines_array_split_by_word = []
+        for line in lines:
+            line = re.sub(r' +', ' ', line)
+            lines_splited_by_word = line.split(' ')
+            if lines_splited_by_word and lines_splited_by_word[-1] == '':
+                lines_splited_by_word.pop()
+            if lines_splited_by_word and lines_splited_by_word[0] == '':
+                lines_splited_by_word.pop(0)
+            lines_array_split_by_word.append(lines_splited_by_word)
+        return Formatter.sort_by_column(lines_array_split_by_word)
 
     @staticmethod
     def sort_by_column(array_of_lines):
