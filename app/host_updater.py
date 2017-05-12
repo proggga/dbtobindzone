@@ -53,6 +53,7 @@ class HostUpdater(object):
 
         with open(self.cache_file) as fhandler:
             data = json.loads(fhandler.read())
+
         for host in data:
             name = host['name'].split('.')[0]
             address = host['address']

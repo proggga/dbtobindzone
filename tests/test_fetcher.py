@@ -1,6 +1,6 @@
 """Testing Data from db fetcher"""
 import unittest
-from app.fetcher import DataFetcher
+from app.data_fetcher import DataFetcher
 from app.sql import SqlConnection
 from mock import MagicMock
 

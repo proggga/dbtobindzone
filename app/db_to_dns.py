@@ -1,5 +1,5 @@
 """Main application"""
-from app.fetcher import DataFetcher
+from app.data_fetcher import DataFetcher
 from app.host_updater import HostUpdater
 from app.sql import SqlConnection
 from app.dot_config import DotConfig
