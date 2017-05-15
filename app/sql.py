@@ -1,6 +1,7 @@
 """Sql Connection module store connection options and make querys"""
 # coding: utf-8
 import MySQLdb
+from MySQLdb.cursors import DictCursor
 
 
 class SqlConnection(object):
@@ -32,7 +33,7 @@ class SqlConnection(object):
             db=self.database, port=self.port, charset='utf8',
             connect_timeout=kwargs.get('timeout', 3),
         )
-        cursor = database_connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor = database_connection.cursor(DictCursor)
         rows_count = cursor.execute(query, args)
         data = cursor.fetchall()
         cursor.close()

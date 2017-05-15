@@ -1,5 +1,5 @@
 """Module with Database fetcher methods"""
-import _mysql_exceptions
+from _mysql_exceptions import MySQLError
 
 
 class DataFetcher(object):
@@ -37,6 +37,6 @@ class DataFetcher(object):
         try:
             self._last_state = True
             self._data = self.connection.query(query_string, [])
-        except _mysql_exceptions.MySQLError:
+        except MySQLError:
             self._last_state = False
             self._data = ()

@@ -1,11 +1,11 @@
 """Formatter, helps format by columns"""""
 import re
 try:
-    # Python 3
-    from itertools import zip_longest
-except ImportError:
     # Python 2
     from itertools import izip_longest as zip_longest
+except ImportError:
+    # Python 3
+    from itertools import zip_longest
 
 
 class Formatter(object):

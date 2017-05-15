@@ -2,7 +2,8 @@
 import unittest
 from app.data_fetcher import DataFetcher
 from app.sql import SqlConnection
-from mock import MagicMock
+from _mysql_exceptions import MySQLError
+import mock
 
 
 class TestDataFetcher(unittest.TestCase):
@@ -10,7 +11,7 @@ class TestDataFetcher(unittest.TestCase):
 
     def setUp(self):
         self.connection = SqlConnection()
-        self.connection.query = MagicMock(return_value=())
+        self.connection.query = mock.MagicMock(return_value=())
         self.fetcher = DataFetcher(self.connection)
 
     def test_get_hosts_by_inner_tag(self):
@@ -42,3 +43,10 @@ class TestDataFetcher(unittest.TestCase):
         query = 'SELECT url, host, dns_servers as tag from aliases ' \
                 'where dns_servers in ("both", "moscow")'
         self.connection.query.assert_called_with(query, [])
+
+    def test_execute_raise_mysqlerror(self):
+        """test execute method not working"""
+        self.connection.query = mock.Mock()
+        self.connection.query.side_effect = MySQLError('Some error with query')
+        self.fetcher.get_domains()
+        self.assertFalse(self.fetcher.is_fetch_success())
