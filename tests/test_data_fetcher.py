@@ -14,6 +14,13 @@ class TestDataFetcher(unittest.TestCase):
         self.connection.query = mock.MagicMock(return_value=())
         self.fetcher = DataFetcher(self.connection)
 
+    def test_fetcher_constructor(self):
+        instance = DataFetcher(self.connection)
+        self.assertTrue(instance.is_inner_dns)
+
+        instance = DataFetcher(self.connection, is_inner_dns=False)
+        self.assertFalse(instance.is_inner_dns)
+
     def test_get_hosts_by_inner_tag(self):
         """test get data by inner tag"""
         self.fetcher.is_inner_dns = True
