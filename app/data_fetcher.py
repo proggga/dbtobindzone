@@ -11,7 +11,7 @@ class DataFetcher(object):
         self._last_state = None
         self._data = None
 
-    def last_fetch_status_ok(self):
+    def is_fetch_success(self):
         """return state of last host request"""
         return self._last_state
 
