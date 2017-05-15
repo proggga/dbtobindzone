@@ -18,8 +18,9 @@ class Formatter(object):
         if lines and lines[-1] == '':
             lines.pop()
         lines_array_split_by_word = []
-        for line in lines:
-            line = re.sub(r' +', ' ', line)
+        for raw_line in lines:
+            without_tabs_line = re.sub(r'\t+', ' ', raw_line)
+            line = re.sub(r' +', ' ', without_tabs_line)
             lines_splited_by_word = line.split(' ')
             if lines_splited_by_word and lines_splited_by_word[-1] == '':
                 lines_splited_by_word.pop()

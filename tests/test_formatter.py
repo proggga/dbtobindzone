@@ -83,3 +83,9 @@ class TestFormatter(unittest.TestCase):
         self.assertEqual(result, "a     b\n"
                                  "\n"
                                  "cc    dd\n")
+
+    def test_sort_str_with_tabs(self):
+        """test format with tabs in input"""
+        result = Formatter.sort_str_by_column("a\t\tb\ncc \t \tdd\n")
+        self.assertEqual(result, "a     b\n"
+                                 "cc    dd\n")
