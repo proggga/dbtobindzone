@@ -2,6 +2,7 @@
 import json
 import os
 
+from app.file_helper import FileHelper
 from app.formatter import Formatter
 
 
@@ -75,7 +76,7 @@ class HostUpdater(object):
             if os.path.exists(self.temp_cache_file):
                 os.remove(self.temp_cache_file)
             self._write_json_file(self.temp_cache_file)
-            if self._diff_files():
+            if self.files_differ():
                 os.remove(self.cache_file)
                 os.rename(self.temp_cache_file, self.cache_file)
                 return True
@@ -84,15 +85,9 @@ class HostUpdater(object):
             pass
         return False
 
-    def _diff_files(self):
-        """Private: return true if files differ"""
-        file_one = self.cache_file
-        file_two = self.temp_cache_file
-        with open(file_one) as fhandler_one:
-            file_one_content = fhandler_one.read()
-        with open(file_two) as fhandler_two:
-            file_two_content = fhandler_two.read()
-        return bool(file_one_content != file_two_content)
+    def files_differ(self):
+        """return true if files differ"""
+        return FileHelper.differ(self.cache_file, self.temp_cache_file)
 
     def _create_cache_file(self):
         """Update file with new data"""
