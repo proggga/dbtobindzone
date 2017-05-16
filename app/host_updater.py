@@ -55,20 +55,23 @@ class HostUpdater(object):
         if zone not in self.zones:
             raise ZoneNotFoundException('zone "{}" not found'.format(zone))
 
-        zone_file = os.path.join(self.dns_dir, zone + '.hosts')
-        lines = []
-        lines.append(['$ORIGIN', zone + '.'])
-        lines.append([])
-
         self.refresh_cache()
+        lines = self._format_zone_file_content(zone)
+        zone_file = os.path.join(self.dns_dir, zone + '.hosts')
+        with open(zone_file, 'w+') as filehandler:
+            filehandler.write(Formatter.sort_by_column(lines))
 
+    def _format_zone_file_content(self, zone_name):
+        """Method which format file content"""
+        lines = [
+            ['$ORIGIN', zone_name + '.'],
+            []
+        ]
         for host in self.hosts:
             name = host['name'].split('.')[0]
             address = host['address']
             lines.append([name, 'IN', 'A', address])
-
-        with open(zone_file, 'w+') as filehandler:
-            filehandler.write(Formatter.sort_by_column(lines))
+        return lines
 
     def _update_cache_file(self):
         """Private: update cache file if it really need"""
