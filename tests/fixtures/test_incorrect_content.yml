@@ -1,0 +1,5 @@
+user: username
+ask_password: False
+connection:
+    host: example.org
+    port: 8080

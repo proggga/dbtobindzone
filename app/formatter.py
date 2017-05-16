@@ -38,15 +38,17 @@ class Formatter(object):
     @staticmethod
     def format_line(max_sizes_by_columns, line):
         """Format lines with by sizes table"""
+        if not line:
+            return '\n'
+
         defaultoffset = 4
         result_line = ""
+
+        last_word = line.pop()
         for index, word in enumerate(line):
-            if index < len(line) - 1:
-                result_line += word.ljust(max_sizes_by_columns[index]
-                                          + defaultoffset)
-            else:
-                result_line += word
-        result_line += '\n'
+            result_line += word.ljust(max_sizes_by_columns[index] +
+                                      defaultoffset)
+        result_line += last_word + '\n'
         return result_line
 
     @staticmethod

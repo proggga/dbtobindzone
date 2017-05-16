@@ -1,8 +1,8 @@
 """Main application"""
 from app.data_fetcher import DataFetcher
+from app.dot_config import DotConfig
 from app.host_updater import HostUpdater
 from app.sql import SqlConnection
-from app.dot_config import DotConfig
 
 
 class DBtoDns(object):
@@ -20,9 +20,9 @@ class DBtoDns(object):
     def update_hosts(self):
         """main method"""
         print("Status is ", self.host_updater.refresh_cache())
-        self.host_updater.update()
+        # self.host_updater.update()
 
     def update_kodwebs(self):
         """main method"""
         print("Status is ", self.host_updater.refresh_cache())
-        self.host_updater.update()
+        # self.host_updater.update()

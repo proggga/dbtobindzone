@@ -1,8 +1,9 @@
 """Test sql connection module"""
 import unittest
-import mock
-from app.sql import SqlConnection
+
 from _mysql_exceptions import MySQLError
+from app.sql import SqlConnection
+import mock
 
 
 class TestSqlConnector(unittest.TestCase):
@@ -49,6 +50,7 @@ class TestSqlConnector(unittest.TestCase):
             self.assertEqual(data, ())
 
     def test_set_connection_options(self):
+        """Test method which set new connection options"""
         connection = SqlConnection(host='8.8.8.8', user='anon',
                                    password='bad_bass',
                                    port=999, database='nodb')

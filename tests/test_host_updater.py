@@ -5,19 +5,13 @@ import unittest
 
 from app.data_fetcher import DataFetcher
 from app.host_updater import HostUpdater
+from app.host_updater import ZoneNotFoundException
 from app.sql import SqlConnection
 import mock
 
 
 class TestHostUpdater(unittest.TestCase):
     """Test hostupdater class"""
-
-    def assert_raises_with_messsage(self, msg, func, *args, **kwargs):
-        """assert that check Exception raised and has certain message"""
-
-        with self.assertRaises(Exception) as content_manager:
-            func(*args, **kwargs)
-        self.assertEqual(str(content_manager.exception), msg)
 
     def setUp(self):
         self.connection = SqlConnection()
@@ -77,16 +71,21 @@ class TestHostUpdater(unittest.TestCase):
         self.connection.query = mock.MagicMock(return_value=())
         self.assertTrue(self.host_updater.refresh_cache())
 
+    def test_failed_with_unknown_zone(self):
+        """Test update_zone raises ZoneNotFound"""
+        with self.assertRaises(ZoneNotFoundException) as context_manager:
+            self.host_updater.update_zone('not exists')
+        self.assertEqual(str(context_manager.exception),
+                         'zone "not exists" not found')
+
     def test_update_zone(self):
         """test method update_zone genereate certain content
 
-        test looks close to integrity test"""
+        test looks close to integrity test
+        """
         self.host_updater.zones = ['example.org', 'nowhere.com']
         self.connection.query = mock.MagicMock(return_value=self.data_host2_v1)
         self.host_updater.refresh_cache()
-        self.assert_raises_with_messsage('zone "not exists" not found',
-                                         self.host_updater.update_zone,
-                                         'not exists')
         self.host_updater.update_zone('example.org')
         zone_file = os.path.join(self.host_updater.dns_dir,
                                  'example.org.hosts')
@@ -140,7 +139,9 @@ class TestHostUpdater(unittest.TestCase):
 
     def test_ref_cache_with_tempfile(self):
         """check existance of temp cachefile not broke system
-        this file created for diff with current cache file"""
+
+        this file created for diff with current cache file
+        """
         # update cache file from db
         self.host_updater.refresh_cache()
         # create temp_cache_file to test it doesnt broke system

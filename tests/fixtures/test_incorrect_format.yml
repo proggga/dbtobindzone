@@ -1,0 +1,6 @@
+qconfig:12312
+@    user: username
+44    password: password
+#    connection:
+\r3        host: example.org
+        port: 8080

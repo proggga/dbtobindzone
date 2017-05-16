@@ -1,8 +1,9 @@
 """Testing Data from db fetcher"""
 import unittest
+
+from _mysql_exceptions import MySQLError
 from app.data_fetcher import DataFetcher
 from app.sql import SqlConnection
-from _mysql_exceptions import MySQLError
 import mock
 
 
@@ -15,6 +16,7 @@ class TestDataFetcher(unittest.TestCase):
         self.fetcher = DataFetcher(self.connection)
 
     def test_fetcher_constructor(self):
+        """test data fetcher constructor"""
         instance = DataFetcher(self.connection)
         self.assertTrue(instance.is_inner_dns)
 

@@ -80,7 +80,7 @@ class HostUpdater(object):
                 os.rename(self.temp_cache_file, self.cache_file)
                 return True
             os.remove(self.temp_cache_file)
-        except OSError as ex:
+        except OSError:
             pass
         return False
 
@@ -99,8 +99,7 @@ class HostUpdater(object):
         try:
             self._write_json_file(self.cache_file)
             return True
-        except OSError as ex:
-            pass
+        except OSError:
             return False
 
     def _write_json_file(self, filename):
