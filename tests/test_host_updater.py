@@ -4,8 +4,8 @@ import os
 import unittest
 
 from app.data_fetcher import DataFetcher
+from app.exceptions import ZoneNotFoundException
 from app.host_updater import HostUpdater
-from app.host_updater import ZoneNotFoundException
 from app.sql import SqlConnection
 import mock
 

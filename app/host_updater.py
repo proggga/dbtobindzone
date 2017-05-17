@@ -2,13 +2,9 @@
 import json
 import os
 
+from app.exceptions import ZoneNotFoundException
 from app.file_helper import FileHelper
 from app.formatter import Formatter
-
-
-class ZoneNotFoundException(Exception):
-    """Zone Not Found Exception"""
-    pass
 
 
 class HostUpdater(object):
