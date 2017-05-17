@@ -1,13 +1,25 @@
 config:
     connection:
-        host: example.host
+        host: icinga.dmz
         port: 3306
-        user: username
-        password: password
-        database: database
-    dns:
-        path: /var/named/chroot/etc/m/
-        inner: True
+        user: progga
+        password: progga
+        database: progga
+    database_hosts:
+        table: hosts
+        ip_field: inIP
+        hostname_field: name
+    database_domains:
+        domain_table: aliases
+        url_field: url
+        hostname_field: host
+        tag_field: dns_servers
+    dns-path: /var/named/chroot/etc/m/
+    zone_cache_dir: /var/named/chroot/tmp/cache
+    common_tag: any
     zones:
-        - zone1.ru
-        - zone2.com
+        kodeks.ru:
+            - internal
+            - sites
+        dmz:
+            - internal

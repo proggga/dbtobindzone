@@ -1,4 +1,4 @@
-"""Module with HostUpdater class"""
+"""Module with DomainUpdater class"""
 import json
 import os
 
@@ -7,7 +7,7 @@ from app.file_helper import FileHelper
 from app.formatter import Formatter
 
 
-class HostUpdater(object):
+class DomainUpdater(object):
     """Class allow update host by zone"""
 
     def __init__(self, fetcher, dns_dir, zones, cache_dir):

@@ -3,7 +3,7 @@
 import os
 import unittest
 
-from app.data_fetcher import DataFetcher
+from app.fetcher.host_data_fetcher import HostDataFetcher
 from app.exceptions import ZoneNotFoundException
 from app.host_updater import HostUpdater
 from app.sql import SqlConnection
@@ -16,7 +16,7 @@ class TestHostUpdater(unittest.TestCase):
     def setUp(self):
         self.connection = SqlConnection()
 
-        self.fetcher = DataFetcher(self.connection, is_inner_dns=True)
+        self.fetcher = HostDataFetcher(self.connection)
         self.data_host2_v1 = ({
             'name': 'server1.dmz', 'address': '10.0.0.1'
         }, {
@@ -108,7 +108,8 @@ class TestHostUpdater(unittest.TestCase):
         from database and when cache not found should
         make empty list
         """
-        mock_method_path = 'app.data_fetcher.DataFetcher.is_fetch_success'
+        mock_method_path = ('app.fetcher.host_data_fetcher'
+                            '.HostDataFetcher.is_fetch_success')
         with mock.patch(mock_method_path) as mock_method:
             mock_method.return_value = False
             self.host_updater.refresh_cache()
@@ -122,7 +123,8 @@ class TestHostUpdater(unittest.TestCase):
         self.host_updater.hosts = []
         # then mock fetcher fails when trying to get data from database
         # and refresh_cache should read from cache, not from db
-        mock_method_path = 'app.data_fetcher.DataFetcher.is_fetch_success'
+        mock_method_path = ('app.fetcher.host_data_fetcher'
+                            '.DataFetcher.is_fetch_success')
         with mock.patch(mock_method_path) as mock_method:
             mock_method.return_value = False
             self.host_updater.refresh_cache()
@@ -153,8 +155,8 @@ class TestHostUpdater(unittest.TestCase):
     def test_refresh_error_create_cache(self):
         """test exception block in refresh_cache in create block"""
         mock_method_path = 'app.host_updater.HostUpdater.cache_file'
-        with mock.patch(mock_method_path, new_callable=mock.PropertyMock) \
-                as mock_method:
+        patch = mock.patch(mock_method_path, new_callable=mock.PropertyMock)
+        with patch as mock_method:
             mock_method.return_value = '/TMP/DIR/NOT/EXISTS'
             result = self.host_updater.refresh_cache()
             self.assertFalse(result)
@@ -163,8 +165,8 @@ class TestHostUpdater(unittest.TestCase):
         """test exception block in refresh_cache in create block"""
         self.host_updater.refresh_cache()
         mock_method_path = 'app.host_updater.HostUpdater.temp_cache_file'
-        with mock.patch(mock_method_path, new_callable=mock.PropertyMock) \
-                as mock_method:
+        patch = mock.patch(mock_method_path, new_callable=mock.PropertyMock)
+        with patch as mock_method:
             mock_method.return_value = '/TMP/DIR/NOT/EXISTS'
             result = self.host_updater.refresh_cache()
             self.assertFalse(result)

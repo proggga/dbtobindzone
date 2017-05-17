@@ -48,13 +48,13 @@ class DotConfig(object):
             with open(filename) as fileio_wrapper:
                 config_yaml = yaml.safe_load(fileio_wrapper)
         except yaml.scanner.ScannerError:
-            message = 'Some error with file format in {} (should be YAML)' \
-                      .format(filename)
+            message = ('Some error with file format in {} (should be YAML)'
+                       .format(filename))
             raise OSError(message)
 
         if config_yaml and 'config' in config_yaml:
             return cls(config_yaml['config'])
         else:
-            message = 'Config {} is empty, or have not "config" block'\
-                .format(filename)
+            message = ('Config {} is empty, or have not "config" block'
+                       .format(filename))
             raise OSError(message)

@@ -69,8 +69,8 @@ class TestDotConfigCase(unittest.TestCase):
     def test_load_from_bad_yml(self):
         """test load from bad yml file"""
         filename = 'tests/fixtures/test_incorrect_format.yml'
-        message = "Some error with file format in {} (should be YAML)"\
-            .format(filename)
+        message = ("Some error with file format in {} (should be YAML)"
+                   .format(filename))
         with self.assertRaises(OSError) as contextmanager:
             DotConfig.load(filename)
         self.assertEqual(str(contextmanager.exception), message)
@@ -78,8 +78,8 @@ class TestDotConfigCase(unittest.TestCase):
     def test_load_from_bad_file_content(self):
         """test load from bad yml file"""
         filename = 'tests/fixtures/test_incorrect_content.yml'
-        message = 'Config {} is empty, or have not "config" block'\
-            .format(filename)
+        message = ('Config {} is empty, or have not "config" block'
+                   .format(filename))
         with self.assertRaises(OSError) as contextmanager:
             DotConfig.load(filename)
         self.assertEqual(str(contextmanager.exception), message)
