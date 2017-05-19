@@ -1,11 +1,12 @@
 """ Test DomainUpdater class with content in files"""
 # coding: utf-8
-import os
 import unittest
 
-from app.exceptions import ZoneNotFoundException
+import os
+# from app.exceptions import ZoneNotFoundException
 from app.domain_updater import DomainUpdater
 import mock
+import json
 
 
 class TestDomainUpdater(unittest.TestCase):
@@ -25,32 +26,56 @@ class TestDomainUpdater(unittest.TestCase):
             'host': 'server3.dmz',
             'tag': 'any',
         }, )
-        self.data_hosts_internal = ({
-            'name': 'server1.dmz', 'address': '10.0.0.11'
-        }, {
-            'name': 'server2.dmz', 'address': '10.0.0.2'
-        })
-        self.data_hosts_external = ({
-            'name': 'server1.dmz', 'address': '8.8.8.8'
-        }, {
-            'name': 'server2.dmz', 'address': '9.9.9.9'
-        })
 
-    #     self.fetcher = mock.MagicMock()
-    #     self.fetcher.get_hosts.return_value = self.data_hosts_internal
-    #     self.fetcher.get_domains.return_value = self.data_hosts_internal
-    #     self.domain_updater = DomainUpdater(self.fetcher,
-    #                                         tags=[
-    #                                             'any',
-    #                                             'inner'
-    #                                         ],
-    #                                         dns_dir='/tmp/test_m/',
-    #                                         zones=[
-    #                                             'example.ru',
-    #                                             'example.com',
-    #                                         ],
-    #                                         cache_dir='/tmp/test_m/')
-    #
-    # def tearDown(self):
-    #     if os.path.exists(self.domain_updater.cache_file):
-    #         os.remove(self.domain_updater.cache_file)
+        self.fetcher = mock.MagicMock()
+        self.fetcher.get_data.return_value = self.domains
+        self.domain_updater = DomainUpdater(self.fetcher,
+                                            dns_dir='/tmp/test_m/',
+                                            zones={
+                                                'example.ru': [
+                                                    'any',
+                                                    'internal'
+                                                ],
+                                                'example.com': [
+                                                    'any',
+                                                    'internal'
+                                                ],
+                                            },
+                                            cache_dir='/tmp/test_m/')
+
+    def test_domain_cache_update(self):
+        '''test cache created and right format'''
+        self.domain_updater.refresh_cache()
+        self.assertTrue(os.path.exists(self.domain_updater.cache_file))
+        content = ''
+        with open(self.domain_updater.cache_file) as fhandler:
+            content = fhandler.read()
+        self.assertEqual(json.loads(content), list(self.domains))
+
+    def test_create_zone_file(self):
+        """test file zone created with domains"""
+        zone = 'example.ru'
+        self.domain_updater.update_zone(zone)
+        content = ''
+        with open(self.domain_updater.get_zone_file(zone)) as fhandler:
+            content = fhandler.read()
+        self.assertEqual(content, "$ORIGIN             example.ru.\n"
+                                  "\n"
+                                  "site1.example.ru    IN             "
+                                  "CNAME    server1\n"
+                                  "site3.example.ru    IN             "
+                                  "CNAME    server3\n")
+
+    def test_create_zone_file_second_version(self):
+        """test file zone created with domains"""
+        self.domain_updater.refresh_cache()
+        self.assertTrue(os.path.exists(self.domain_updater.cache_file))
+        zone = 'example.com'
+        self.domain_updater.update_zone(zone)
+        content = ''
+        with open(self.domain_updater.get_zone_file(zone)) as fhandler:
+            content = fhandler.read()
+        self.assertEqual(content, "$ORIGIN              example.com.\n"
+                                  "\n"
+                                  "site2.example.com    IN              "
+                                  "CNAME    server2\n")

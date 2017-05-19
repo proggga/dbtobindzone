@@ -15,12 +15,12 @@ class DomainUpdater(object):
         self.dns_dir = dns_dir
         self.zones = zones
         self.cache_dir = cache_dir
-        self.hosts = []
+        self.domains = []
 
     @property
     def cache_file(self):
         """return cache file"""
-        return os.path.join(self.cache_dir, 'hosts.cache')
+        return os.path.join(self.cache_dir, 'domains.cache')
 
     @property
     def temp_cache_file(self):
@@ -31,29 +31,29 @@ class DomainUpdater(object):
         """Refresh cache file"""
         self.fetcher.execute()
         if self.fetcher.is_fetch_success():
-            self.hosts = self.fetcher.get_data()
+            self.domains = self.fetcher.get_data()
             if os.path.exists(self.cache_file):
                 return self._update_cache_file()
             return self._create_cache_file()
         elif os.path.exists(self.cache_file):
             with open(self.cache_file) as fhandler:
-                self.hosts = json.loads(fhandler.read())
+                self.domains = json.loads(fhandler.read())
         else:
-            self.hosts = []
+            self.domains = []
 
     def update_zones(self):
-        """Update hosts in all zones"""
+        """Update domains in all zones"""
         for zone in self.zones:
             self.update_zone(zone)
 
     def update_zone(self, zone):
-        """Update hosts only in certain zone"""
+        """Update domains only in certain zone"""
         if zone not in self.zones:
             raise ZoneNotFoundException('zone "{}" not found'.format(zone))
 
         self.refresh_cache()
         lines = self._format_zone_file_content(zone)
-        zone_file = os.path.join(self.dns_dir, zone + '.hosts')
+        zone_file = self.get_zone_file(zone)
         with open(zone_file, 'w+') as filehandler:
             filehandler.write(Formatter.sort_by_column(lines))
 
@@ -63,11 +63,16 @@ class DomainUpdater(object):
             ['$ORIGIN', zone_name + '.'],
             []
         ]
-        for host in self.hosts:
-            name = host['name'].split('.')[0]
-            address = host['address']
-            lines.append([name, 'IN', 'A', address])
+        for domain in self.domains:
+            name = domain['url']
+            if name.endswith(zone_name):
+                address = domain['host'].split('.')[0]
+                lines.append([name, 'IN', 'CNAME', address])
         return lines
+
+    def get_zone_file(self, zone):
+        """Get Zone file"""
+        return os.path.join(self.dns_dir, zone + '.domain')
 
     def _update_cache_file(self):
         """Private: update cache file if it really need"""
@@ -103,4 +108,4 @@ class DomainUpdater(object):
 
     def _get_formatted_data(self):
         """Return json data"""
-        return json.dumps(self.hosts, indent=4)
+        return json.dumps(self.domains, indent=4)
