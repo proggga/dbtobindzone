@@ -1,9 +1,9 @@
 """Main application"""
-from app.fetcher.host_data_fetcher import HostDataFetcher
 from app.dot_config import DotConfig
-from app.host_updater import HostUpdater
-from app.domain_updater import DomainUpdater
+from app.fetcher.host_data_fetcher import HostDataFetcher
 from app.sql import SqlConnection
+from app.updaters.domain_updater import DomainUpdater
+from app.updaters.host_updater import HostUpdater
 
 
 class DBtoDns(object):
@@ -25,9 +25,17 @@ class DBtoDns(object):
                                             zones=config.zones,
                                             cache_dir=config.zone_cache_dir)
 
+    def update(self):
+        """update any"""
+        self.update_hosts()
+        self.update_domains()
+
     def update_hosts(self):
-        """main method"""
+        """update hosts"""
         self.host_updater.refresh_cache()
+        print(self.host_updater.data)
+
+    def update_domains(self):
+        """update domains"""
         self.domain_updater.refresh_cache()
-        print(self.host_updater.hosts)
-        print(self.domain_updater.hosts)
+        print(self.domain_updater.data)

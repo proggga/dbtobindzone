@@ -1,12 +1,11 @@
 """ Test DomainUpdater class with content in files"""
 # coding: utf-8
+import json
+import os
 import unittest
 
-import os
-# from app.exceptions import ZoneNotFoundException
-from app.domain_updater import DomainUpdater
+from app.updaters.domain_updater import DomainUpdater
 import mock
-import json
 
 
 class TestDomainUpdater(unittest.TestCase):
@@ -66,7 +65,7 @@ class TestDomainUpdater(unittest.TestCase):
                                   "site3.example.ru    IN             "
                                   "CNAME    server3\n")
 
-    def test_create_zone_file_second_version(self):
+    def test_create_zone_file_ver2(self):
         """test file zone created with domains"""
         self.domain_updater.refresh_cache()
         self.assertTrue(os.path.exists(self.domain_updater.cache_file))
