@@ -8,6 +8,7 @@ install:
     - pip install -r requirements.txt
     - pip install coveralls
 script:
+    - mkdir /tmp/test_m/
     - coverage run --source='.' -m pytest --pylint --flake8
 after_success:
     - coveralls
