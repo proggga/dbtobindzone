@@ -14,7 +14,7 @@ config:
         url_field: url
         hostname_field: host
         tag_field: dns_servers
-    dns-path: /var/named/chroot/etc/m/
+    dnspath: /var/named/chroot/etc/m/
     zone_cache_dir: /var/named/chroot/tmp/cache
     common_tag: any
     zones:

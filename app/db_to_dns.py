@@ -15,13 +15,13 @@ class DBtoDns(object):
         host_fetcher = HostDataFetcher(self.connection,
                                        **config.database_hosts)
         self.host_updater = HostUpdater(fetcher=host_fetcher,
-                                        dns_dir=config.dns.path,
+                                        dns_dir=config.dnspath,
                                         zones=config.zones,
                                         cache_dir=config.zone_cache_dir)
         domain_fetcher = HostDataFetcher(self.connection,
                                          **config.database_hosts)
         self.domain_updater = DomainUpdater(fetcher=domain_fetcher,
-                                            dns_dir=config.dns.path,
+                                            dns_dir=config.dnspath,
                                             zones=config.zones,
                                             cache_dir=config.zone_cache_dir)
 
