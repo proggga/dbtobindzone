@@ -4,6 +4,7 @@ import unittest
 from _mysql_exceptions import MySQLError
 from app.sql import SqlConnection
 import mock
+import re
 
 
 class TestSqlConnector(unittest.TestCase):
@@ -17,9 +18,9 @@ class TestSqlConnector(unittest.TestCase):
                                    port=999, database='nodb')
         with self.assertRaises(MySQLError) as context_manager:
             self.assertEqual(connection.query('', '', timeout=1), ())
-        self.assertEqual(str(context_manager.exception),
-                         '(2003, \'Can\\\'t connect to MySQL server on '
-                         '\\\'8.8.8.8\\\' (110 "Connection timed out")\')')
+        exception = context_manager.exception
+        self.assertTrue(re.match(r".*connect to MySQL server on.*8\.8\.8\.8.*",
+                                 str(exception)))
 
     def test_sql_connect(self):
         """test sql connect method (big mock)"""
