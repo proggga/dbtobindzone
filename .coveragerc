@@ -1,0 +1,7 @@
+[report]
+omit =
+    */python?.?/*
+    */python?.?-dev/*
+    */site-packages/nose/*
+    */manage.py
+    */wrunner/wsgi.py
