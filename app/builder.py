@@ -8,16 +8,16 @@ class DnsBuilder(object):
     """DnsBuilder Abstact class"""
 
     @abc.abstractmethod
-    def add_record(self, record):
+    def add_record(self, record):  # pragma: no cover
         """add record to builder"""
-        raise NotImplementedError
+        pass
 
     @abc.abstractmethod
-    def add_alias(self, alias_record):
+    def add_alias(self, alias_record):  # pragma: no cover
         """add alias to builder"""
-        raise NotImplementedError
+        pass
 
     @abc.abstractmethod
-    def get_result(self):
+    def get_result(self):  # pragma: no cover
         """return builded product"""
-        raise NotImplementedError
+        pass

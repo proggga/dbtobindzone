@@ -9,11 +9,8 @@ class TestBuilderTestCase(unittest.TestCase):
 
     def test_builder_is_abstact(self):
         """Test inteface is abstact"""
-        try:
+        with self.assertRaises(TypeError):
             DnsBuilder()  # pylint: disable=abstract-class-instantiated
-            self.fail()
-        except TypeError:
-            pass
 
     def test_builder_has_methods(self):
         """Test inteface is abstact"""

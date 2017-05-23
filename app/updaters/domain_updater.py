@@ -10,10 +10,9 @@ class DomainUpdater(Updater):
         self.data = []
         self.prefix = 'domains'
 
-    def _format_zone_file_content(self, zone_name):
+    def _format_zone_file_content(self, zone_name, initial_lines=None):
         """Method which format file content"""
-        self.set_zone_header(zone_name)
-        lines = self.get_initial_lines()
+        lines = list(initial_lines)
         for domain in self.data:
             name = domain['url']
             if name.endswith(zone_name):

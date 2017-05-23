@@ -1,4 +1,5 @@
 """Updater common data"""
+import abc
 import json
 import os
 
@@ -17,20 +18,6 @@ class Updater(object):
         self.cache_dir = cache_dir
         self.prefix = 'updater'
         self.data = []
-        self.initial_lines = []
-
-    def get_initial_lines(self):
-        """Get initial lines header"""
-        result = self.initial_lines
-        self.initial_lines = []
-        return result
-
-    def set_zone_header(self, zone_name):
-        """Get header of new zone file"""
-        self.initial_lines = [
-            ['$ORIGIN', zone_name + '.'],
-            []
-        ]
 
     def refresh_cache(self):
         """Refresh cache file"""
@@ -61,11 +48,11 @@ class Updater(object):
         for zone in self.zones:
             self.update_zone(zone)
 
-    def _format_zone_file_content(self, zone_name):
+    @abc.abstractmethod
+    def _format_zone_file_content(self, zone_name,
+                                  initial_lines=None):  # pragma: no cover
         """Format data for file"""
-        raise NotImplementedError('method not implemented '
-                                  '(cannot generate zone "{}")'
-                                  .format(zone_name))
+        pass
 
     def update_zone(self, zone):
         """Update hosts only in certain zone"""
@@ -73,7 +60,12 @@ class Updater(object):
             raise ZoneNotFoundException('zone "{}" not found'.format(zone))
 
         self.refresh_cache()
-        lines = self._format_zone_file_content(zone)
+        initial_lines = [
+            ['$ORIGIN', zone + '.'],
+            []
+        ]
+        lines = self._format_zone_file_content(zone,
+                                               initial_lines=initial_lines)
         zone_file = os.path.join(self.dns_dir, self.get_zone_file(zone))
         with open(zone_file, 'w+') as filehandler:
             filehandler.write(Formatter.sort_by_column(lines))
