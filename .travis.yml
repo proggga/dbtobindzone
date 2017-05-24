@@ -6,8 +6,9 @@ before_install:
   - pip install --upgrade pytest
 install:
     - pip install -r requirements.txt
+    - pip install tox
     - pip install coveralls
 script:
-    - coverage run --source='.' -m pytest --pylint --flake8
+    - tox -e $TRAVIS_PYTHON_VERSION
 after_success:
     - coveralls
