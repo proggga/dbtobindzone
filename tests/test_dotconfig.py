@@ -57,10 +57,7 @@ class TestDotConfigCase(unittest.TestCase):
         """Test key which not exists"""
         config = DotConfig({})
         with self.assertRaises(KeyError):
-            if config.some_key_not_exists:
-                self.fail()
-            else:
-                self.fail()
+            config.some_key_not_exists()
 
     def test_str_method(self):
         """test get_attribute"""
