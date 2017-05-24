@@ -66,7 +66,7 @@ class Updater(object):
         ]
         lines = self._format_zone_file_content(zone,
                                                initial_lines=initial_lines)
-        zone_file = os.path.join(self.dns_dir, self.get_zone_file(zone))
+        zone_file = self.get_zone_file(zone)
         with open(zone_file, 'w+') as filehandler:
             filehandler.write(Formatter.sort_by_column(lines))
 
@@ -85,7 +85,7 @@ class Updater(object):
                 os.rename(self.temp_cache_file, self.cache_file)
                 return True
             os.remove(self.temp_cache_file)
-        except OSError:
+        except EnvironmentError:
             pass
         return False
 
@@ -98,7 +98,7 @@ class Updater(object):
         try:
             self._write_json_file(self.cache_file)
             return True
-        except OSError:
+        except EnvironmentError:
             return False
 
     def _write_json_file(self, filename):

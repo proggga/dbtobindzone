@@ -33,9 +33,9 @@ class DBtoDns(object):
     def update_hosts(self):
         """update hosts"""
         self.host_updater.refresh_cache()
-        print(self.host_updater.data)
+        print("Hosts:", self.host_updater.data)
 
     def update_domains(self):
         """update domains"""
         self.domain_updater.refresh_cache()
-        print(self.domain_updater.data)
+        print("Domains:", self.domain_updater.data)

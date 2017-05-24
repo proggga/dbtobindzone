@@ -30,7 +30,7 @@ class TestFileHelper(unittest.TestCase):
 
     def test_not_exists_files(self):
         """test file which not exists"""
-        with self.assertRaises(FileNotFoundError):
+        with self.assertRaises(EnvironmentError):
             FileHelper.differ(self.file_not_exists, self.file1)
-        with self.assertRaises(FileNotFoundError):
+        with self.assertRaises(EnvironmentError):
             FileHelper.differ(self.file1, self.file_not_exists)

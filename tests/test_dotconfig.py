@@ -11,7 +11,7 @@ class TestDotConfigCase(unittest.TestCase):
         """test simple constructor"""
         config = DotConfig({})
         self.assertIsInstance(config, DotConfig)
-        self.assertEqual(list(config.keys()), [])
+        self.assertEqual(set(config.keys()), set([]))
 
     def test_constructor_without_args(self):
         """test simple constructor without args"""
@@ -26,7 +26,7 @@ class TestDotConfigCase(unittest.TestCase):
     def test_give_some_data(self):
         """test simple constructor without args"""
         config = DotConfig({'startup': True, 'clients': 10})
-        self.assertEqual(list(config.keys()), ['startup', 'clients'])
+        self.assertEqual(set(config.keys()), set(['startup', 'clients']))
         self.assertEqual(config.startup, True)
         self.assertEqual(config.clients, 10)
 
@@ -55,11 +55,12 @@ class TestDotConfigCase(unittest.TestCase):
 
     def test_str_method(self):
         """test get_attribute"""
-        config = DotConfig({
+        data = {
             'text': 'hello',
             'count': 10,
-        })
-        self.assertEqual(str(config), "{'text': 'hello', 'count': 10}")
+        }
+        config = DotConfig(data)
+        self.assertEqual(str(config), str(data))
 
     def test_load_fail_wrong_file(self):
         """test error when file not found"""

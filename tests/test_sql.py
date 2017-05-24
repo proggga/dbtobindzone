@@ -1,10 +1,10 @@
 """Test sql connection module"""
+import re
 import unittest
 
 from _mysql_exceptions import MySQLError
 from app.sql import SqlConnection
 import mock
-import re
 
 
 class TestSqlConnector(unittest.TestCase):

@@ -5,3 +5,6 @@ config.yml
 test_m
 .cache
 session.json
+tests/test_work_dir/*
+!tests/test_work_dir/.gitkeep
+.tox

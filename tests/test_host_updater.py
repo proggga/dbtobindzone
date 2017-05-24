@@ -33,9 +33,9 @@ class TestHostUpdater(unittest.TestCase):
         },)
         self.connection.query = mock.MagicMock(return_value=self.data_host1)
         self.host_updater = HostUpdater(self.fetcher,
-                                        dns_dir='/tmp/test_m/',
+                                        dns_dir='tests/test_work_dir/',
                                         zones=[''],
-                                        cache_dir='/tmp/test_m/')
+                                        cache_dir='tests/test_work_dir/')
 
     def tearDown(self):
         if os.path.exists(self.host_updater.cache_file):

@@ -29,7 +29,7 @@ class TestDomainUpdater(unittest.TestCase):
         self.fetcher = mock.MagicMock()
         self.fetcher.get_data.return_value = self.domains
         self.domain_updater = DomainUpdater(self.fetcher,
-                                            dns_dir='/tmp/test_m/',
+                                            dns_dir='tests/test_work_dir/',
                                             zones={
                                                 'example.ru': [
                                                     'any',
@@ -40,7 +40,7 @@ class TestDomainUpdater(unittest.TestCase):
                                                     'internal'
                                                 ],
                                             },
-                                            cache_dir='/tmp/test_m/')
+                                            cache_dir='tests/test_work_dir/')
 
     def test_domain_cache_update(self):
         '''test cache created and right format'''
