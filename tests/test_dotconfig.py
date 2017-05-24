@@ -53,6 +53,15 @@ class TestDotConfigCase(unittest.TestCase):
         self.assertEqual(config['user'], 'jack')
         self.assertEqual(config['passwd'], 'password1234')
 
+    def test_getattr_failed(self):
+        """Test key which not exists"""
+        config = DotConfig({})
+        with self.assertRaises(KeyError):
+            if config.some_key_not_exists:
+                self.fail()
+            else:
+                self.fail()
+
     def test_str_method(self):
         """test get_attribute"""
         data = {
