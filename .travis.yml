@@ -8,6 +8,9 @@ matrix:
       env: TOX_ENV=py27
     - python: "3.6"
       env: TOX_ENV=py36
+  exclude:
+    - python: "2.7"
+    - python: "3.6"
 before_install:
   - pip install --upgrade pytest
 install:
