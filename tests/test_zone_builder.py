@@ -58,6 +58,10 @@ class TestZoneBuilderCase(unittest.TestCase):
             'hostname': 'vpn.example.another.domain',
             'address': '91.56.33.251',
         }
+        self.record_site_two = {
+            'hostname': 'site',
+            'address': '8.8.8.8',
+        }
         self.alias_site = {
             'hostname': 'demo',
             'address': 'site.example.com',
@@ -97,6 +101,45 @@ class TestZoneBuilderCase(unittest.TestCase):
         """Add alias to host which not exists in db (may be hardcoded)"""
         self.builder.add_record(self.record_site)
         self.builder.add_alias(self.alias_site)
+        result = self.builder.get_result()
+        self.assertEqual(result, '$ORIGIN    example.com.\n'
+                                 'site       IN              A        '
+                                 '1.2.3.4\n'
+                                 'demo       IN              CNAME    '
+                                 'site\n')
+
+    def test_add_two_records_with_same(self):
+        """Add another ip to same name"""
+        self.builder.add_record(self.record_site)
+        self.builder.add_record(self.record_site_two)
+        self.builder.add_record(self.record_site_two)
+        result = self.builder.get_result()
+        self.assertEqual(result, '$ORIGIN    example.com.\n'
+                                 'site       IN              A    '
+                                 '1.2.3.4\n'
+                                 'site       IN              A    '
+                                 '8.8.8.8\n')
+
+    @unittest.skip("Need rebuild builder to work this -> make Composite"
+                   "A and CNAME Record Composite class")
+    def test_two_same_aliases(self):
+        """Add alias to host which not exists in db (may be hardcoded)"""
+        self.builder.add_record(self.record_site)
+        self.builder.add_alias(self.alias_site)
+        self.builder.add_alias(self.alias_site)
+        result = self.builder.get_result()
+        self.assertEqual(result, '$ORIGIN    example.com.\n'
+                                 'site       IN              A        '
+                                 '1.2.3.4\n'
+                                 'demo       IN              CNAME    '
+                                 'site\n')
+
+    @unittest.skip("Need rebuild builder to work this -> make Composite"
+                   "A and CNAME Record Composite class")
+    def test_two_aliases_wrong_order(self):
+        """Add alias to host which not exists in db (may be hardcoded)"""
+        self.builder.add_alias(self.alias_site)
+        self.builder.add_record(self.record_site)
         result = self.builder.get_result()
         self.assertEqual(result, '$ORIGIN    example.com.\n'
                                  'site       IN              A        '
