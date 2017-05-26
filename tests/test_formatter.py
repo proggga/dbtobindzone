@@ -3,7 +3,7 @@ Test Foramming file with tabs
 '''
 import unittest
 
-from app.formatter import Formatter
+from app.misc.formatter import Formatter
 
 
 class TestFormatter(unittest.TestCase):

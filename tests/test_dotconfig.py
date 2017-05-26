@@ -1,7 +1,7 @@
 """Test DotConfig class"""
 import unittest
 
-from app.dot_config import DotConfig
+from app.misc.dot_config import DotConfig
 
 
 class TestDotConfigCase(unittest.TestCase):

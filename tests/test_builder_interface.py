@@ -1,7 +1,7 @@
 """Test builder interface"""
 import unittest
 
-from app.builder import DnsBuilder
+from app.builders.builder import DnsBuilder
 
 
 class TestBuilderTestCase(unittest.TestCase):

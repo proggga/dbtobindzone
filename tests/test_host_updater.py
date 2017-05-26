@@ -5,9 +5,9 @@ import unittest
 
 import mock
 
-from app.exceptions import ZoneNotFoundException
 from app.fetcher.host_data_fetcher import HostDataFetcher
-from app.sql import SqlConnection
+from app.misc.exceptions import ZoneNotFoundException
+from app.misc.sql import SqlConnection
 from app.updaters.host_updater import HostUpdater
 
 

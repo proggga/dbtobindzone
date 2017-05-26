@@ -3,9 +3,9 @@ import abc
 import json
 import os
 
-from app.exceptions import ZoneNotFoundException
-from app.file_helper import FileHelper
-from app.formatter import Formatter
+from app.misc.exceptions import ZoneNotFoundException
+from app.misc.file_helper import FileHelper
+from app.misc.formatter import Formatter
 
 
 class Updater(object):

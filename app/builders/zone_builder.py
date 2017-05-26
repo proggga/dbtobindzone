@@ -1,10 +1,10 @@
 """Abstact builder"""
 import re
 
-from app.builder import DnsBuilder
-from app.dot_config import DotConfig
-from app.exceptions import InvalidZone
-from app.formatter import Formatter
+from app.builders.builder import DnsBuilder
+from app.misc.dot_config import DotConfig
+from app.misc.exceptions import InvalidZone
+from app.misc.formatter import Formatter
 
 
 class ZoneBuilder(DnsBuilder):

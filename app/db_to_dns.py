@@ -1,7 +1,7 @@
 """Main application"""
-from app.dot_config import DotConfig
 from app.fetcher.host_data_fetcher import HostDataFetcher
-from app.sql import SqlConnection
+from app.misc.dot_config import DotConfig
+from app.misc.sql import SqlConnection
 from app.updaters.domain_updater import DomainUpdater
 from app.updaters.host_updater import HostUpdater
 
