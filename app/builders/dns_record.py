@@ -14,6 +14,18 @@ class DnsRecord(object):
         self.aliases = {}
         self.references_to = references_to
 
+    def search(self, domain_name):
+        """Search domain_name in aliases"""
+        if self.fqdn == domain_name:
+            return self
+        if domain_name in self.aliases:
+            return self.aliases[domain_name]
+        for alias in self.aliases.values():
+            search_result = alias.search(domain_name)
+            if search_result:
+                return search_result
+        return None
+
     def add_alias(self, alias_domain_name):
         """Add alias method"""
         alias = DnsRecord(self.zone, alias_domain_name, self)
@@ -31,27 +43,13 @@ class DnsRecord(object):
     @property
     def fqdn(self):
         """Return fqdn"""
-        domain = self.domain_name
-        fqdn_data = [domain]
-        if isinstance(self.references_to, str):
-            fqdn_data.append(self.zone)
-        else:
-            fqdn_data.append(self.zone)
-            # elif not domain.endswith(self.references_to.fqdn):
-            #     fqdn_data.append(self.references_to.fqdn)
-
-        return '.'.join(fqdn_data)
-
-    @property
-    def server_name(self):
-        """Get full name without zone"""
-        return self.fqdn.replace('.' + self.zone, '')
+        return '.'.join((self.domain_name, self.zone))
 
     def get_references(self):
         """get references object"""
         if isinstance(self.references_to, str):
             return self.references_to
-        return self.references_to.server_name
+        return self.references_to.domain_name
 
     def get_type(self):
         """get references object"""
@@ -60,6 +58,6 @@ class DnsRecord(object):
         return "CNAME"
 
     def __str__(self):
-        return "{} IN {} {}".format(self.server_name,
+        return "{} IN {} {}".format(self.domain_name,
                                     self.get_type(),
                                     self.get_references())

@@ -94,6 +94,9 @@ class TestDnsRecordCase(unittest.TestCase):
         record = DnsRecord('com', 'example.com', '1.2.3.4')
         alias = record.add_alias('www.example.com')
         self.assertEqual(str(alias), "www.example IN CNAME example")
+        megaserver_alias = alias.add_alias('megaserver.com')
+        self.assertEqual(str(megaserver_alias),
+                         "megaserver IN CNAME www.example")
 
     def test_add_subdomain(self):
         """Test subdomain method"""
@@ -103,3 +106,26 @@ class TestDnsRecordCase(unittest.TestCase):
         alias_to_alias = alias.add_subdomain('www')
         self.assertEqual(str(alias_to_alias), "www.dev.example IN "
                                               "CNAME dev.example")
+
+    def test_alias_to_subdomain(self):
+        """Test alias to subdomain works"""
+        record = DnsRecord('com', 'example.com', '1.2.3.4')
+        subdomain = record.add_subdomain('dev')
+        alias = subdomain.add_alias('mainserver.example.com')
+        self.assertEqual(str(alias), "mainserver.example IN "
+                                     "CNAME dev.example")
+
+    def test_subdomain_to_alias(self):
+        """Test subdomain to alias"""
+        record = DnsRecord('com', 'example.com', '1.2.3.4')
+        alias = record.add_alias('mainserver.example.com')
+        subdomain = alias.add_subdomain('dev')
+        self.assertEqual(str(subdomain), "dev.mainserver.example IN "
+                                         "CNAME mainserver.example")
+
+    def test_search_method(self):
+        record = DnsRecord('com', 'example.com', '1.2.3.4')
+        alias = record.add_alias('mainserver.example.com')
+        alias.add_subdomain('dev')
+        alias = record.search('dev.mainserver.example.com')
+        self.assertEqual(alias.fqdn, 'dev.mainserver.example.com')
