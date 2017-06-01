@@ -11,11 +11,14 @@ class DnsRecord(object):
             domain_name = domain_name.replace('.' + zone, '')
         self.domain_name = domain_name
         self.zone = zone
+        self.aliases = {}
         self.references_to = references_to
+        if isinstance(references_to, DnsRecord):
+            references_to.add_alias(self)
 
-    def add_alias(self):
+    def add_alias(self, alias):
         """Add alias method"""
-        pass
+        self.aliases[alias.fqdn] = alias
 
     @property
     def fqdn(self):

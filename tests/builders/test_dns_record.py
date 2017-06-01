@@ -17,35 +17,35 @@ class TestDnsRecordCase(unittest.TestCase):
         self.assertTrue(hasattr(record, 'add_alias'))
 
     def test_str_method(self):
-        """Test dns record string"""
+        """Test str method"""
         record = DnsRecord('com', 'example', '1.2.3.4')
         self.assertEqual(str(record), "example IN A 1.2.3.4")
 
     def test_name_with_zone(self):
-        """Test dns record string"""
+        """Test domain name with fqdn"""
         record = DnsRecord('com', 'www.example.com', '1.2.3.4')
         self.assertEqual(record.zone, "com")
         self.assertEqual(record.domain_name, "www.example")
         self.assertEqual(str(record), "www.example IN A 1.2.3.4")
 
     def test_fqdn_with_zone(self):
-        """Test dns record string"""
+        """Test fqdn of fqdn"""
         record = DnsRecord('com', 'www.example.com', '1.2.3.4')
         self.assertEqual(record.fqdn, "www.example.com")
 
     def test_fqdn_without_zone(self):
-        """Test dns record string"""
+        """Test fqdn without zone"""
         record = DnsRecord('com', 'www.example', '1.2.3.4')
         self.assertEqual(record.fqdn, "www.example.com")
 
     def test_fqdn_of_alias(self):
-        """Test dns record string"""
+        """Test fqnd of alias"""
         record = DnsRecord('com', 'www.example', '1.2.3.4')
         alias = DnsRecord('com', 'jopka', record)
         self.assertEqual(alias.fqdn, "jopka.www.example.com")
 
     def test_fqdn_of_alias_w_fqdn(self):
-        """Test dns record string"""
+        """Test alias name ref to fqdn"""
         record = DnsRecord('com', 'www.example', '1.2.3.4')
         alias = DnsRecord('com', 'jopka.www.example.com', record)
         self.assertEqual(alias.fqdn, "jopka.www.example.com")
@@ -53,15 +53,15 @@ class TestDnsRecordCase(unittest.TestCase):
                          "IN CNAME www.example")
 
     def test_fqdn_of_alias_w_domain(self):
-        """Test dns record string"""
+        """Test alias name refs parent name, without zone"""
         record = DnsRecord('com', 'www.example', '1.2.3.4')
         alias = DnsRecord('com', 'jopka.www.example', record)
         self.assertEqual(alias.fqdn, "jopka.www.example.com")
         self.assertEqual(str(alias), "jopka.www.example "
                          "IN CNAME www.example")
 
-
     def testzone_with_dot(self):
+        """test zone with dot"""
         record = DnsRecord('.com', 'www.example.com', '1.2.3.4')
         self.assertEqual(str(record), "www.example IN A 1.2.3.4")
         self.assertEqual(record.zone, "com")
@@ -79,3 +79,9 @@ class TestDnsRecordCase(unittest.TestCase):
         second_alias = DnsRecord('com', 'john.example.com', alias)
         self.assertEqual(str(second_alias),
                          "john.example IN CNAME www.example")
+
+    def test_add_alias(self):
+        """test add_alias_method"""
+        record = DnsRecord('com', 'example.com', '1.2.3.4')
+        alias = DnsRecord('com', 'www.example.com', record)
+        self.assertTrue(alias == alias)
