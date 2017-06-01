@@ -52,6 +52,14 @@ class TestDnsRecordCase(unittest.TestCase):
         self.assertEqual(str(alias), "jopka.www.example "
                          "IN CNAME www.example")
 
+    def test_fqdn_of_alias_w_domain(self):
+        """Test dns record string"""
+        record = DnsRecord('com', 'www.example', '1.2.3.4')
+        alias = DnsRecord('com', 'jopka.www.example', record)
+        self.assertEqual(alias.fqdn, "jopka.www.example.com")
+        self.assertEqual(str(alias), "jopka.www.example "
+                         "IN CNAME www.example")
+
 
     def testzone_with_dot(self):
         record = DnsRecord('.com', 'www.example.com', '1.2.3.4')
