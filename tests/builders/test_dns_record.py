@@ -2,6 +2,7 @@
 import unittest
 
 from app.builders.dns_record import DnsRecord
+from app.misc.exceptions import DnsRecordNotFound
 
 
 class TestDnsRecordCase(unittest.TestCase):
@@ -130,3 +131,16 @@ class TestDnsRecordCase(unittest.TestCase):
         alias.add_subdomain('dev')
         result = record.search('dev.mainserver.example.com')
         self.assertEqual(result.fqdn, 'dev.mainserver.example.com')
+
+    def test_search_same_record(self):
+        """Test search same record"""
+        record = DnsRecord('com', 'example.com', '1.2.3.4')
+        same_record = record.search('example.com')
+        self.assertEqual(record, same_record)
+        self.assertEqual(id(record), id(same_record))
+
+    def test_search_not_found(self):
+        """Test search and not found"""
+        record = DnsRecord('com', 'example.com', '1.2.3.4')
+        with self.assertRaises(DnsRecordNotFound):
+            record.search('some.data')

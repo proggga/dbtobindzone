@@ -1,4 +1,5 @@
 """Dns Record"""
+from app.misc.exceptions import DnsRecordNotFound
 
 
 class DnsRecord(object):
@@ -24,7 +25,7 @@ class DnsRecord(object):
             search_result = alias.search(domain_name)
             if search_result:
                 return search_result
-        return None
+        raise DnsRecordNotFound
 
     def add_alias(self, alias_domain_name):
         """Add alias method"""
