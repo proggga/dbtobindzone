@@ -26,6 +26,11 @@ class DnsRecordException(DbDnsException):
     pass
 
 
-class DnsRecordNotFound(DbDnsException):
+class DnsRecordNotFound(DnsRecordException):
     """DnsRecord not found"""
+    pass
+
+
+class ReferenceToNoneException(DnsRecordException):
+    """Reference to empty target"""
     pass

@@ -1,5 +1,6 @@
 """Dns Record"""
 from app.misc.exceptions import DnsRecordNotFound
+from app.misc.exceptions import ReferenceToNoneException
 
 
 class DnsRecord(object):
@@ -14,6 +15,19 @@ class DnsRecord(object):
         self.zone = zone
         self.aliases = {}
         self.references_to = references_to
+
+    def get_zone_file(self):
+        """Get format for zone and childs"""
+        result = []
+        if str(self):
+            result.append(str(self))
+        for alias in self.aliases.values():
+            if isinstance(alias, DnsRecord):
+                result.extend(alias.get_zone_file())
+            else:
+                if alias != '':
+                    result.append(alias)
+        return result
 
     def search(self, domain_name):
         """Search domain_name in aliases"""
@@ -59,6 +73,8 @@ class DnsRecord(object):
         return "CNAME"
 
     def __str__(self):
+        if not self.references_to:
+            raise ReferenceToNoneException()
         return "{} IN {} {}".format(self.domain_name,
                                     self.get_type(),
                                     self.get_references())
