@@ -13,12 +13,20 @@ class DnsRecord(object):
         self.zone = zone
         self.aliases = {}
         self.references_to = references_to
-        if isinstance(references_to, DnsRecord):
-            references_to.add_alias(self)
 
-    def add_alias(self, alias):
+    def add_alias(self, alias_domain_name):
         """Add alias method"""
-        self.aliases[alias.fqdn] = alias
+        alias = DnsRecord(self.zone, alias_domain_name, self)
+        if alias.fqdn not in self.aliases:
+            self.aliases[alias.fqdn] = alias
+        return alias
+
+    def add_subdomain(self, subdomain):
+        """Add subdomain as alias method"""
+        alias = DnsRecord(self.zone, subdomain + '.' + self.domain_name, self)
+        if alias.fqdn not in self.aliases:
+            self.aliases[alias.fqdn] = alias
+        return alias
 
     @property
     def fqdn(self):
@@ -28,18 +36,22 @@ class DnsRecord(object):
         if isinstance(self.references_to, str):
             fqdn_data.append(self.zone)
         else:
-            if domain.endswith(self.references_to.domain_name):
-                fqdn_data.append(self.zone)
-            elif not domain.endswith(self.references_to.fqdn):
-                fqdn_data.append(self.references_to.fqdn)
+            fqdn_data.append(self.zone)
+            # elif not domain.endswith(self.references_to.fqdn):
+            #     fqdn_data.append(self.references_to.fqdn)
 
         return '.'.join(fqdn_data)
+
+    @property
+    def server_name(self):
+        """Get full name without zone"""
+        return self.fqdn.replace('.' + self.zone, '')
 
     def get_references(self):
         """get references object"""
         if isinstance(self.references_to, str):
             return self.references_to
-        return self.references_to.domain_name
+        return self.references_to.server_name
 
     def get_type(self):
         """get references object"""
@@ -48,6 +60,6 @@ class DnsRecord(object):
         return "CNAME"
 
     def __str__(self):
-        return "{} IN {} {}".format(self.domain_name,
+        return "{} IN {} {}".format(self.server_name,
                                     self.get_type(),
                                     self.get_references())

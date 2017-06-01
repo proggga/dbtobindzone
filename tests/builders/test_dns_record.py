@@ -42,7 +42,16 @@ class TestDnsRecordCase(unittest.TestCase):
         """Test fqnd of alias"""
         record = DnsRecord('com', 'www.example', '1.2.3.4')
         alias = DnsRecord('com', 'jopka', record)
-        self.assertEqual(alias.fqdn, "jopka.www.example.com")
+        self.assertEqual(alias.fqdn, "jopka.com")
+
+    def test_fqdn_of_alias_alias(self):
+        """Test fqnd of alias of alias"""
+        record = DnsRecord('com', 'example', '1.2.3.4')
+        alias1 = DnsRecord('com', 'server.example', record)
+        alias2 = DnsRecord('com', 'dev.server.example', alias1)
+        self.assertEqual(alias2.fqdn, "dev.server.example.com")
+        self.assertEqual(str(alias2), "dev.server.example IN CNAME "
+                                      "server.example")
 
     def test_fqdn_of_alias_w_fqdn(self):
         """Test alias name ref to fqdn"""
@@ -83,5 +92,14 @@ class TestDnsRecordCase(unittest.TestCase):
     def test_add_alias(self):
         """test add_alias_method"""
         record = DnsRecord('com', 'example.com', '1.2.3.4')
-        alias = DnsRecord('com', 'www.example.com', record)
-        self.assertTrue(alias == alias)
+        alias = record.add_alias('www.example.com')
+        self.assertEqual(str(alias), "www.example IN CNAME example")
+
+    def test_add_subdomain(self):
+        """Test subdomain method"""
+        record = DnsRecord('com', 'example.com', '1.2.3.4')
+        alias = record.add_subdomain('dev')
+        self.assertEqual(str(alias), "dev.example IN CNAME example")
+        alias_to_alias = alias.add_subdomain('www')
+        self.assertEqual(str(alias_to_alias), "www.dev.example IN "
+                                              "CNAME dev.example")
