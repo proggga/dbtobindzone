@@ -13,6 +13,7 @@ matrix:
     - python: "3.6"
 before_install:
   - pip install --upgrade pytest
+  - pip install six
 install:
     - pip install -r requirements.txt
     - pip install tox
