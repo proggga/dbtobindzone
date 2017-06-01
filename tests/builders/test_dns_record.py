@@ -124,8 +124,9 @@ class TestDnsRecordCase(unittest.TestCase):
                                          "CNAME mainserver.example")
 
     def test_search_method(self):
+        """Test search method"""
         record = DnsRecord('com', 'example.com', '1.2.3.4')
         alias = record.add_alias('mainserver.example.com')
         alias.add_subdomain('dev')
-        alias = record.search('dev.mainserver.example.com')
-        self.assertEqual(alias.fqdn, 'dev.mainserver.example.com')
+        result = record.search('dev.mainserver.example.com')
+        self.assertEqual(result.fqdn, 'dev.mainserver.example.com')
