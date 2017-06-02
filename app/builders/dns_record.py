@@ -34,6 +34,7 @@ class DnsRecord(object):
             raise InvalidReferencesException
 
     def add_references(self, new_references):
+        """add another references_to"""
         self.state.add_references(self, new_references)
 
     def change_state(self, new_state):

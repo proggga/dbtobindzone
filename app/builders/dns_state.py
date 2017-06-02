@@ -18,21 +18,29 @@ class DnsRecordState(object):
             cls._instance = inst
         return cls._instance
 
-    def get_string(self, record):
+    @staticmethod
+    def get_string(record):
         """used by DnsRecord as __str__ method"""
+        raise NotImplementedError()
+
+    @staticmethod
+    def add_references(record, new_references):
+        """used by DnsRecord as add references method"""
         raise NotImplementedError()
 
 
 class AliasDnsRecordState(DnsRecordState):
     """AliasDnsRecordState it is state of DnsRecord"""
 
-    def get_string(self, record):
+    @staticmethod
+    def get_string(record):
         if not record.references_to:
             raise ReferenceToNoneException()
         return "{} IN CNAME {}".format(record.domain_name,
                                        record.references_to.domain_name)
 
-    def add_references(self, record, new_references):
+    @staticmethod
+    def add_references(record, new_references):
         """Add references to alias not implemented"""
         pass
 
@@ -40,7 +48,8 @@ class AliasDnsRecordState(DnsRecordState):
 class BalancedHostDnsRecordState(DnsRecordState):
     """BalancedHostDnsRecordState it is state of DnsRecord"""
 
-    def get_string(self, record):
+    @staticmethod
+    def get_string(record):
         """Return __str__ content"""
         if not record.references_to:
             raise ReferenceToNoneException()
@@ -50,7 +59,8 @@ class BalancedHostDnsRecordState(DnsRecordState):
                                               reference))
         return '\n'.join(result)
 
-    def add_references(self, record, new_references):
+    @staticmethod
+    def add_references(record, new_references):
         "add new reference to"
         if new_references not in record.references_to:
             record.references_to.append(new_references)
@@ -59,14 +69,16 @@ class BalancedHostDnsRecordState(DnsRecordState):
 class HostDnsRecordState(DnsRecordState):
     """HostDnsRecordState it is state of DnsRecord"""
 
-    def get_string(self, record):
+    @staticmethod
+    def get_string(record):
         """Return __str__ content"""
         if not record.references_to:
             raise ReferenceToNoneException()
         return "{} IN A {}".format(record.domain_name,
                                    record.references_to)
 
-    def add_references(self, record, new_references):
+    @staticmethod
+    def add_references(record, new_references):
         "add new reference to, switch state"
         last_address = record.references_to
         record.references_to = [last_address, new_references]
