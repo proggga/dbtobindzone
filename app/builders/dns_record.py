@@ -1,5 +1,6 @@
 """Dns Record"""
 from app.misc.exceptions import DnsRecordNotFound
+from app.misc.exceptions import InvalidReferencesException
 
 from app.builders.dns_state import AliasDnsRecordState
 from app.builders.dns_state import BalancedHostDnsRecordState
@@ -18,23 +19,22 @@ class DnsRecord(object):
         self.zone = zone
         self.aliases = {}
         self.state = None
-        self.references_to = references_to
-        self.set_initial_state()
+        self.set_references(references_to)
 
-    def set_initial_state(self):
+    def set_references(self, new_references):
         """Set state to self"""
-        if isinstance(self.references_to, list):
-            if len(self.references_to) > 1:
-                self.change_state(BalancedHostDnsRecordState())
-            else:
-                self.change_state(HostDnsRecordState())
-        elif isinstance(self.references_to,
-                        DnsRecord):
+        self.references_to = new_references
+        if isinstance(new_references, list):
+            self.change_state(BalancedHostDnsRecordState())
+        elif isinstance(new_references, DnsRecord):
             self.change_state(AliasDnsRecordState())
-        elif isinstance(self.references_to, str):
+        elif isinstance(new_references, str):
             self.change_state(HostDnsRecordState())
         else:
-            raise Exception('shit, strange situation')
+            raise InvalidReferencesException
+
+    def add_references(self, new_references):
+        self.state.add_references(self, new_references)
 
     def change_state(self, new_state):
         """Change DnsRecordState"""
@@ -43,14 +43,11 @@ class DnsRecord(object):
     def get_zone_file(self):
         """Get format for zone and childs"""
         result = []
-        if str(self):
-            result.append(str(self))
+        result_line = str(self)
+        if result_line:
+            result.append(result_line)
         for alias in self.aliases.values():
-            if isinstance(alias, DnsRecord):
-                result.extend(alias.get_zone_file())
-            else:
-                if alias != '':
-                    result.append(alias)
+            result.extend(alias.get_zone_file())
         return result
 
     def search(self, domain_name):

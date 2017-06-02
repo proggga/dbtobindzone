@@ -108,7 +108,6 @@ class TestZoneBuilderCase(unittest.TestCase):
                                  'demo       IN              CNAME    '
                                  'site\n')
 
-    @unittest.skip('Broken, need fix')
     def test_add_two_records_with_same(self):
         """Add another ip to same name"""
         self.builder.add_record(self.record_site)
@@ -133,7 +132,6 @@ class TestZoneBuilderCase(unittest.TestCase):
                                  'demo       IN              CNAME    '
                                  'site\n')
 
-    @unittest.skip('Broken, need fix')
     def test_two_aliases_wrong_order(self):
         """Add alias to host which not exists in db (may be hardcoded)"""
         self.builder.add_alias(self.alias_site)

@@ -32,6 +32,10 @@ class AliasDnsRecordState(DnsRecordState):
         return "{} IN CNAME {}".format(record.domain_name,
                                        record.references_to.domain_name)
 
+    def add_references(self, record, new_references):
+        """Add references to alias not implemented"""
+        pass
+
 
 class BalancedHostDnsRecordState(DnsRecordState):
     """BalancedHostDnsRecordState it is state of DnsRecord"""
@@ -46,6 +50,11 @@ class BalancedHostDnsRecordState(DnsRecordState):
                                               reference))
         return '\n'.join(result)
 
+    def add_references(self, record, new_references):
+        "add new reference to"
+        if new_references not in record.references_to:
+            record.references_to.append(new_references)
+
 
 class HostDnsRecordState(DnsRecordState):
     """HostDnsRecordState it is state of DnsRecord"""
@@ -56,3 +65,9 @@ class HostDnsRecordState(DnsRecordState):
             raise ReferenceToNoneException()
         return "{} IN A {}".format(record.domain_name,
                                    record.references_to)
+
+    def add_references(self, record, new_references):
+        "add new reference to, switch state"
+        last_address = record.references_to
+        record.references_to = [last_address, new_references]
+        record.change_state(BalancedHostDnsRecordState())
