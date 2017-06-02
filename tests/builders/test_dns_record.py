@@ -3,19 +3,11 @@ import unittest
 
 from app.builders.dns_record import DnsRecord
 from app.misc.exceptions import DnsRecordNotFound
+from app.misc.exceptions import InvalidReferencesException
 
 
 class TestDnsRecordCase(unittest.TestCase):
     """Test DnsRecord Class main case"""
-
-    def test_constructor(self):
-        """test class constructor"""
-        record = DnsRecord('com', 'example.com', '1.2.3.4')
-        self.assertTrue(hasattr(record, 'zone'))
-        self.assertTrue(hasattr(record, 'domain_name'))
-        self.assertTrue(hasattr(record, 'references_to'))
-        self.assertTrue(hasattr(record, 'fqdn'))
-        self.assertTrue(hasattr(record, 'add_alias'))
 
     def test_str_method(self):
         """Test str method"""
@@ -144,3 +136,32 @@ class TestDnsRecordCase(unittest.TestCase):
         record = DnsRecord('com', 'example.com', '1.2.3.4')
         with self.assertRaises(DnsRecordNotFound):
             record.search('some.data')
+
+
+class TestDnsRecordConstructor(unittest.TestCase):
+    """Test constructor and set_references method"""
+
+    def test_constructor_fails(self):
+        """Test constructor fails with not str, list"""
+        with self.assertRaises(InvalidReferencesException):
+            DnsRecord('com', 'example.com', 10)
+
+    def test_constructor(self):
+        """test class constructor"""
+        record = DnsRecord('com', 'example.com', '1.2.3.4')
+        self.assertTrue(hasattr(record, 'zone'))
+        self.assertTrue(hasattr(record, 'domain_name'))
+        self.assertTrue(hasattr(record, 'references_to'))
+        self.assertTrue(hasattr(record, 'fqdn'))
+        self.assertTrue(hasattr(record, 'add_alias'))
+
+    def test_ref_to_list_of_one(self):
+        """ref to list of one ip"""
+        record = DnsRecord('com', 'example.com', ['1.2.3.4'])
+        self.assertEqual(str(record), "example IN A 1.2.3.4")
+
+    def test_ref_to_list_of_two(self):
+        """ref to list of two ip"""
+        record = DnsRecord('com', 'example.com', ['1.2.3.4', '5.6.7.8'])
+        self.assertEqual(str(record), "example IN A 1.2.3.4\n"
+                                      "example IN A 5.6.7.8")

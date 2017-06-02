@@ -34,3 +34,8 @@ class DnsRecordNotFound(DnsRecordException):
 class ReferenceToNoneException(DnsRecordException):
     """Reference to empty target"""
     pass
+
+
+class InvalidReferencesException(DnsRecordException):
+    """Reference is not valid (not str or list)"""
+    pass
