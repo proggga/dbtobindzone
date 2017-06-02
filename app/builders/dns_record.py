@@ -1,6 +1,9 @@
 """Dns Record"""
 from app.misc.exceptions import DnsRecordNotFound
-from app.misc.exceptions import ReferenceToNoneException
+
+from app.builders.dns_state import AliasDnsRecordState
+from app.builders.dns_state import BalancedHostDnsRecordState
+from app.builders.dns_state import HostDnsRecordState
 
 
 class DnsRecord(object):
@@ -14,7 +17,28 @@ class DnsRecord(object):
         self.domain_name = domain_name
         self.zone = zone
         self.aliases = {}
+        self.state = None
         self.references_to = references_to
+        self.set_initial_state()
+
+    def set_initial_state(self):
+        """Set state to self"""
+        if isinstance(self.references_to, list):
+            if len(self.references_to) > 1:
+                self.change_state(BalancedHostDnsRecordState())
+            else:
+                self.change_state(HostDnsRecordState())
+        elif isinstance(self.references_to,
+                        DnsRecord):
+            self.change_state(AliasDnsRecordState())
+        elif isinstance(self.references_to, str):
+            self.change_state(HostDnsRecordState())
+        else:
+            raise Exception('shit, strange situation')
+
+    def change_state(self, new_state):
+        """Change DnsRecordState"""
+        self.state = new_state
 
     def get_zone_file(self):
         """Get format for zone and childs"""
@@ -60,21 +84,5 @@ class DnsRecord(object):
         """Return fqdn"""
         return '.'.join((self.domain_name, self.zone))
 
-    def get_references(self):
-        """get references object"""
-        if isinstance(self.references_to, str):
-            return self.references_to
-        return self.references_to.domain_name
-
-    def get_type(self):
-        """get references object"""
-        if isinstance(self.references_to, str):
-            return "A"
-        return "CNAME"
-
     def __str__(self):
-        if not self.references_to:
-            raise ReferenceToNoneException()
-        return "{} IN {} {}".format(self.domain_name,
-                                    self.get_type(),
-                                    self.get_references())
+        return self.state.get_string(self)
