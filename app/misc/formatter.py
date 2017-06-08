@@ -46,8 +46,8 @@ class Formatter(object):
 
         last_word = line.pop()
         for index, word in enumerate(line):
-            result_line += word.ljust(max_sizes_by_columns[index]
-                                      + defaultoffset)
+            text = max_sizes_by_columns[index] + defaultoffset
+            result_line += word.ljust(text)
         result_line += last_word + '\n'
         return result_line
 
