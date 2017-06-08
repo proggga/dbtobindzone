@@ -1,7 +1,4 @@
 language: python
-python:
-  - "2.7"
-  - "3.6"
 matrix:
   include:
     - python: "2.7"
@@ -14,9 +11,6 @@ matrix:
       env: TOX_ENV=py36-pylint
     - python: "3.6"
       env: TOX_ENV=py36-mccabe
-  exclude:
-    - python: "2.7"
-    - python: "3.6"
 before_install:
   - pip install --upgrade pytest
   - pip install six
