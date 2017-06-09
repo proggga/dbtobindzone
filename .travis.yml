@@ -2,15 +2,17 @@ language: python
 matrix:
   include:
     - python: "2.7"
-      env: TOX_ENV=py27-test
+      env: TOX_ENV=py27-metrics
+    - python: "2.7"
+      env: TOX_ENV=py27-lint
+    - python: "2.7"
+      env: TOX_ENV=py27-coverage
     - python: "3.6"
-      env: TOX_ENV=py36-test
+      env: TOX_ENV=py36-metrics
     - python: "3.6"
-      env: TOX_ENV=py36-flake8
+      env: TOX_ENV=py36-lint
     - python: "3.6"
-      env: TOX_ENV=py36-pylint
-    - python: "3.6"
-      env: TOX_ENV=py36-mccabe
+      env: TOX_ENV=py36-coverage
 before_install:
   - pip install --upgrade pytest
   - pip install six
