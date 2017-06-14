@@ -52,9 +52,14 @@ class DotConfig(object):
                        .format(filename))
             raise OSError(message)
 
-        if config_yaml and 'config' in config_yaml:
-            return cls(config_yaml['config'])
+        key = 'config'
+        message = ('Config {} is empty or have not "{}" block'
+                   .format(filename, key))
+        return DotConfig._return_or_rise(key, config_yaml, message)
+
+    @classmethod
+    def _return_or_rise(cls, key, data_dict, message='Error in dict'):
+        if data_dict and key in data_dict:
+            return cls(data_dict[key])
         else:
-            message = ('Config {} is empty, or have not "config" block'
-                       .format(filename))
             raise OSError(message)

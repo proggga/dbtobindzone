@@ -132,6 +132,13 @@ class TestZoneBuilderCase(unittest.TestCase):
                                  'demo       IN              CNAME    '
                                  'site\n')
 
+    def test_search_alias(self):
+        """Add alias to host which not exists in db (may be hardcoded)"""
+        self.builder.add_record(self.record_site)
+        alias_record = self.builder.add_alias(self.alias_site)
+        record = self.builder.search_record(self.alias_site['hostname'])
+        self.assertEqual(record, alias_record)
+
     def test_two_aliases_wrong_order(self):
         """Add alias to host which not exists in db (may be hardcoded)"""
         self.builder.add_alias(self.alias_site)

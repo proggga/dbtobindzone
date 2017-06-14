@@ -53,7 +53,7 @@ class DnsRecord(object):
 
     def search(self, domain_name):
         """Search domain_name in aliases"""
-        if self.fqdn == domain_name:
+        if self._domain_is_mine(domain_name):
             return self
         if domain_name in self.aliases:
             return self.aliases[domain_name]
@@ -62,6 +62,10 @@ class DnsRecord(object):
             if search_result:
                 return search_result
         raise DnsRecordNotFound
+
+    def _domain_is_mine(self, domain_name):
+        return (self.fqdn == domain_name or
+                domain_name == self.domain_name)
 
     def add_alias(self, alias_domain_name):
         """Add alias method"""

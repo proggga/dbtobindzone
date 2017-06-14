@@ -61,7 +61,12 @@ class Formatter(object):
         zipped = zip_longest(*array_with_sizes_of_words)
         zipped_without_none = [[i for i in word_len if i is not None]
                                for word_len in zipped]
-        return [max(words) for words in zipped_without_none]
+        return Formatter.get_max_in_matrix(zipped_without_none)
+
+    @staticmethod
+    def get_max_in_matrix(matrix):
+        """Get max by line in matrix"""
+        return [max(words) for words in matrix]
 
     @staticmethod
     def get_words_sizes(words_array):

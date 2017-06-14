@@ -44,20 +44,26 @@ class ZoneBuilder(DnsBuilder):
         new_record = DotConfig(alias_record)
         name = new_record.hostname
         refs = new_record.address
-        if refs not in self._records:
-            result = self._search_record(refs)
-            if result:
-                result.add_alias(name)
-            if not result and name not in self._records:
-                alias = DnsRecord(self.zone, name,
-                                  DnsRecord(self.zone, refs, ''))
-                self._aliases_without_ref[refs] = alias
-        else:
-            self._records[refs].add_alias(new_record.hostname)
+        result = self.search_record(refs)
+        if result:
+            return result.add_alias(name)
+        elif self._is_not_stored(name):
+            alias = DnsRecord(self.zone, name,
+                              DnsRecord(self.zone, refs, ''))
+            self._aliases_without_ref[refs] = alias
+            return alias
 
-    def _search_record(self, refs):
-        for record in self._records:
+    def _is_not_stored(self, hostname):
+        return hostname not in self._records
+
+    def search_record(self, refs):
+        """Search record in builder"""
+        if refs in self._records:
+            return self._records[refs]
+
+        for record in self._records.values():
             try:
+                print(str(record), refs)
                 result_record = record.search(refs)
             except DnsRecordNotFound:
                 pass

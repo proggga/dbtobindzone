@@ -85,7 +85,7 @@ class TestDotConfigCase(unittest.TestCase):
     def test_load_from_bad_file_content(self):
         """test load from bad yml file"""
         filename = 'tests/fixtures/test_incorrect_content.yml'
-        message = ('Config {} is empty, or have not "config" block'
+        message = ('Config {} is empty or have not "config" block'
                    .format(filename))
         with self.assertRaises(OSError) as contextmanager:
             DotConfig.load(filename)
