@@ -9,6 +9,7 @@ pytest-cov==2.4.0
 pytest-flake8==0.8.1
 hacking==0.13.0
 flake8==3.3.0
+flake8_docstrings==1.1.0
 pyflakes==1.5.0
 pytest-pylint==0.7.1
 pytest-mccabe==0.1
