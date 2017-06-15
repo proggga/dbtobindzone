@@ -1,12 +1,12 @@
 """Abstact builder."""
 import re
 
-from app.builders.builder import DnsBuilder
-from app.builders.dns_record import DnsRecord
-from app.misc.dot_config import DotConfig
-from app.misc.exceptions import DnsRecordNotFound
-from app.misc.exceptions import InvalidZone
-from app.misc.formatter import Formatter
+from dbtobindzone.builders.builder import DnsBuilder
+from dbtobindzone.builders.dns_record import DnsRecord
+from dbtobindzone.misc.dot_config import DotConfig
+from dbtobindzone.misc.exceptions import DnsRecordNotFound
+from dbtobindzone.misc.exceptions import InvalidZone
+from dbtobindzone.misc.formatter import Formatter
 
 
 class ZoneBuilder(DnsBuilder):

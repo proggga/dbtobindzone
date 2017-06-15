@@ -3,9 +3,9 @@ import abc
 import json
 import os
 
-from app.misc.exceptions import ZoneNotFoundException
-from app.misc.file_helper import FileHelper
-from app.misc.formatter import Formatter
+from dbtobindzone.misc.exceptions import ZoneNotFoundException
+from dbtobindzone.misc.file_helper import FileHelper
+from dbtobindzone.misc.formatter import Formatter
 
 
 class Updater(object):

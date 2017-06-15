@@ -1,7 +1,7 @@
 """FileHelper class test."""
 import unittest
 
-from app.misc.file_helper import FileHelper
+from dbtobindzone.misc.file_helper import FileHelper
 
 
 class TestFileHelper(unittest.TestCase):

@@ -1,5 +1,5 @@
 """DnsRecord State."""
-from app.misc.exceptions import ReferenceToNoneException
+from dbtobindzone.misc.exceptions import ReferenceToNoneException
 
 
 class DnsRecordState(object):

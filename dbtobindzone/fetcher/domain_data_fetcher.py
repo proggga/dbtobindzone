@@ -1,5 +1,5 @@
 """Module with Database fetcher methods."""
-from app.fetcher.data_fetcher import DataFetcher
+from dbtobindzone.fetcher.data_fetcher import DataFetcher
 
 
 class DomainDataFetcher(DataFetcher):

@@ -1,10 +1,10 @@
 """Dns Record."""
-from app.misc.exceptions import DnsRecordNotFound
-from app.misc.exceptions import InvalidReferencesException
+from dbtobindzone.misc.exceptions import DnsRecordNotFound
+from dbtobindzone.misc.exceptions import InvalidReferencesException
 
-from app.builders.dns_state import AliasDnsRecordState
-from app.builders.dns_state import BalancedHostDnsRecordState
-from app.builders.dns_state import HostDnsRecordState
+from dbtobindzone.builders.dns_state import AliasDnsRecordState
+from dbtobindzone.builders.dns_state import BalancedHostDnsRecordState
+from dbtobindzone.builders.dns_state import HostDnsRecordState
 
 
 class DnsRecord(object):

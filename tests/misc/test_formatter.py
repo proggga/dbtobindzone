@@ -1,7 +1,7 @@
 """Test format file with tabs."""
 import unittest
 
-from app.misc.formatter import Formatter
+from dbtobindzone.misc.formatter import Formatter
 
 
 class TestFormatter(unittest.TestCase):

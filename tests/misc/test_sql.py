@@ -3,7 +3,7 @@ import re
 import unittest
 
 from _mysql_exceptions import MySQLError
-from app.misc.sql import SqlConnection
+from dbtobindzone.misc.sql import SqlConnection
 import mock
 
 
@@ -26,7 +26,8 @@ class TestSqlConnector(unittest.TestCase):
         connection = SqlConnection(host='8.8.8.8', user='anon',
                                    password='bad_bass',
                                    port=999, database='nodb')
-        with mock.patch('app.misc.sql.MySQLdb.connect') as connect_method:
+        connect_method_path = 'dbtobindzone.misc.sql.MySQLdb.connect'
+        with mock.patch(connect_method_path) as connect_method:
             cursor = mock.Mock(name='cursor_object')
             cursor.execute.return_value = 2
             mock_data = (

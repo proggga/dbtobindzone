@@ -1,9 +1,9 @@
 """Main application."""
-from app.fetcher.host_data_fetcher import HostDataFetcher
-from app.misc.dot_config import DotConfig
-from app.misc.sql import SqlConnection
-from app.updaters.domain_updater import DomainUpdater
-from app.updaters.host_updater import HostUpdater
+from dbtobindzone.fetcher.host_data_fetcher import HostDataFetcher
+from dbtobindzone.misc.dot_config import DotConfig
+from dbtobindzone.misc.sql import SqlConnection
+from dbtobindzone.updaters.domain_updater import DomainUpdater
+from dbtobindzone.updaters.host_updater import HostUpdater
 
 
 class DBtoDns(object):

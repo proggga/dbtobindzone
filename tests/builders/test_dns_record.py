@@ -1,9 +1,9 @@
 """Test DnsRecord Class."""
 import unittest
 
-from app.builders.dns_record import DnsRecord
-from app.misc.exceptions import DnsRecordNotFound
-from app.misc.exceptions import InvalidReferencesException
+from dbtobindzone.builders.dns_record import DnsRecord
+from dbtobindzone.misc.exceptions import DnsRecordNotFound
+from dbtobindzone.misc.exceptions import InvalidReferencesException
 
 
 class TestDnsRecordCase(unittest.TestCase):

@@ -1,8 +1,8 @@
 """ZoneBuilder -> creates file by builder interface."""
 import unittest
 
-from app.builders.zone_builder import ZoneBuilder
-from app.misc.exceptions import InvalidZone
+from dbtobindzone.builders.zone_builder import ZoneBuilder
+from dbtobindzone.misc.exceptions import InvalidZone
 
 
 class TestZoneBuilderConstandStatic(unittest.TestCase):

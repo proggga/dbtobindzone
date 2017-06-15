@@ -1,5 +1,5 @@
 """Module with DomainUpdater class."""
-from app.updaters.updater import Updater
+from dbtobindzone.updaters.updater import Updater
 
 
 class DomainUpdater(Updater):

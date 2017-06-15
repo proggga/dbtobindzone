@@ -1,7 +1,7 @@
 """Testing Data from db fetcher."""
 import unittest
 
-from app.fetcher.host_data_fetcher import HostDataFetcher
+from dbtobindzone.fetcher.host_data_fetcher import HostDataFetcher
 import mock
 
 

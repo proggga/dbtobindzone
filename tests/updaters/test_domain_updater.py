@@ -4,7 +4,7 @@ import json
 import os
 import unittest
 
-from app.updaters.domain_updater import DomainUpdater
+from dbtobindzone.updaters.domain_updater import DomainUpdater
 import mock
 
 
