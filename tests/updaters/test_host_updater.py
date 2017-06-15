@@ -1,4 +1,4 @@
-""" Test HostUpdater class with content in files"""
+"""Test HostUpdater class with content in files."""
 # coding: utf-8
 import os
 import unittest
@@ -12,9 +12,10 @@ from app.updaters.host_updater import HostUpdater
 
 
 class TestHostUpdater(unittest.TestCase):
-    """Test hostupdater class"""
+    """Test hostupdater class."""
 
     def setUp(self):
+        """Setups TestCase.."""
         self.connection = SqlConnection()
 
         self.fetcher = HostDataFetcher(self.connection)
@@ -38,29 +39,30 @@ class TestHostUpdater(unittest.TestCase):
                                         cache_dir='tests/test_work_dir/')
 
     def tearDown(self):
+        """Tear down TestCase."""
         if os.path.exists(self.host_updater.cache_file):
             os.remove(self.host_updater.cache_file)
 
     def test_cache_create(self):
-        """Test refresh create config"""
+        """Test refresh create config."""
         self.assertTrue(self.host_updater.refresh_cache())
         self.assertTrue(os.path.exists(self.host_updater.cache_file))
 
     def test_cache_change(self):
-        """Test cache changed by other content"""
+        """Test cache changed by other content."""
         self.assertTrue(self.host_updater.refresh_cache())
 
         self.connection.query = mock.MagicMock(return_value=self.data_host2_v1)
         self.assertTrue(self.host_updater.refresh_cache())
 
     def test_cache_without_data_change(self):
-        """Test cache not changed"""
+        """Test cache not changed."""
         self.assertTrue(self.host_updater.refresh_cache())
 
         self.assertFalse(self.host_updater.refresh_cache())
 
     def test_cache_change_small_diff(self):
-        """test data dont change after get small diff"""
+        """Test data dont change after get small diff."""
         self.connection.query = mock.MagicMock(return_value=self.data_host2_v1)
         self.assertTrue(self.host_updater.refresh_cache())
 
@@ -68,19 +70,19 @@ class TestHostUpdater(unittest.TestCase):
         self.assertTrue(self.host_updater.refresh_cache())
 
     def test_cache_change_empty_data(self):
-        """test cache create with empty data"""
+        """Test cache create with empty data."""
         self.connection.query = mock.MagicMock(return_value=())
         self.assertTrue(self.host_updater.refresh_cache())
 
     def test_failed_with_unknown_zone(self):
-        """Test update_zone raises ZoneNotFound"""
+        """Test update_zone raises ZoneNotFound."""
         with self.assertRaises(ZoneNotFoundException) as context_manager:
             self.host_updater.update_zone('not exists')
         self.assertEqual(str(context_manager.exception),
                          'zone "not exists" not found')
 
     def test_update_zone(self):
-        """test method update_zone genereate certain content
+        """Test method update_zone genereate certain content.
 
         test looks close to integrity test
         """
@@ -103,7 +105,7 @@ class TestHostUpdater(unittest.TestCase):
                           ''])
 
     def test_db_got_error_without_cache(self):
-        """test database got error -> empty hosts list
+        """Test database got error -> empty hosts list.
 
         then mock fetcher fails when trying to get data
         from database and when cache not found should
@@ -117,7 +119,7 @@ class TestHostUpdater(unittest.TestCase):
         self.assertEqual(self.host_updater.data, [])
 
     def test_db_got_error(self):
-        """test database got error -> loading from cache"""
+        """Test database got error -> loading from cache."""
         # update cache file from db
         self.host_updater.refresh_cache()
         # clean hosts for clean test
@@ -132,7 +134,7 @@ class TestHostUpdater(unittest.TestCase):
         self.assertEqual(self.host_updater.data, list(self.data_host1))
 
     def test_update_zones(self):
-        """test update_zones"""
+        """Test update_zones."""
         self.host_updater.zones = ['zone1.ru', 'zone2.com']
         mock_method_path = 'app.updaters.host_updater.HostUpdater.update_zone'
         with mock.patch(mock_method_path) as mock_method:
@@ -141,7 +143,7 @@ class TestHostUpdater(unittest.TestCase):
             mock_method.assert_any_call('zone2.com')
 
     def test_ref_cache_with_tempfile(self):
-        """check existance of temp cachefile not broke system
+        """Check existance of temp cachefile not broke system.
 
         this file created for diff with current cache file
         """
@@ -154,7 +156,7 @@ class TestHostUpdater(unittest.TestCase):
         self.assertFalse(os.path.exists(self.host_updater.temp_cache_file))
 
     def test_refresh_error_create_cache(self):
-        """test exception block in refresh_cache in create block"""
+        """Test exception block in refresh_cache in create block."""
         mock_method_path = 'app.updaters.host_updater.HostUpdater.cache_file'
         patch = mock.patch(mock_method_path, new_callable=mock.PropertyMock)
         with patch as mock_method:
@@ -163,7 +165,7 @@ class TestHostUpdater(unittest.TestCase):
             self.assertFalse(result)
 
     def test_refresh_error_update_cache(self):
-        """test exception block in refresh_cache in create block"""
+        """Test exception block in refresh_cache in create block."""
         self.host_updater.refresh_cache()
         mock_method_path = ('app.updaters.host_updater'
                             '.HostUpdater.temp_cache_file')

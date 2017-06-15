@@ -1,4 +1,4 @@
-"""Updater common data"""
+"""Updater common data."""
 import abc
 import json
 import os
@@ -9,9 +9,10 @@ from app.misc.formatter import Formatter
 
 
 class Updater(object):
-    """Class allow update host by zone"""
+    """Class allow update host by zone."""
 
     def __init__(self, fetcher, dns_dir, zones, cache_dir):
+        """Init default."""
         self.fetcher = fetcher
         self.dns_dir = dns_dir
         self.zones = zones
@@ -20,7 +21,7 @@ class Updater(object):
         self.data = []
 
     def refresh_cache(self):
-        """Refresh cache file"""
+        """Refresh cache file."""
         self.fetcher.execute()
         if self.fetcher.is_fetch_success():
             self.data = self.fetcher.get_data()
@@ -35,27 +36,27 @@ class Updater(object):
 
     @property
     def cache_file(self):
-        """return cache file"""
+        """Return cache file."""
         return os.path.join(self.cache_dir, self.prefix + '.cache')
 
     @property
     def temp_cache_file(self):
-        """return temp cache file"""
+        """Return temp cache file."""
         return self.cache_file + '.temp'
 
     def update_zones(self):
-        """Update hosts in all zones"""
+        """Update hosts in all zones."""
         for zone in self.zones:
             self.update_zone(zone)
 
     @abc.abstractmethod
     def _format_zone_file_content(self, zone_name,
                                   initial_lines=None):  # pragma: no cover
-        """Format data for file"""
+        """Format data for file."""
         pass
 
     def update_zone(self, zone):
-        """Update hosts only in certain zone"""
+        """Update hosts only in certain zone."""
         if zone not in self.zones:
             raise ZoneNotFoundException('zone "{}" not found'.format(zone))
 
@@ -71,11 +72,11 @@ class Updater(object):
             filehandler.write(Formatter.sort_by_column(lines))
 
     def get_zone_file(self, zone):
-        """Get Zone file"""
+        """Get Zone file."""
         return os.path.join(self.dns_dir, zone + '.' + self.prefix)
 
     def _update_cache_file(self):
-        """Private: update cache file if it really need"""
+        """Private: update cache file if it really need."""
         try:
             if os.path.exists(self.temp_cache_file):
                 os.remove(self.temp_cache_file)
@@ -90,11 +91,11 @@ class Updater(object):
         return False
 
     def files_differ(self):
-        """return true if files differ"""
+        """Return true if files differ."""
         return FileHelper.differ(self.cache_file, self.temp_cache_file)
 
     def _create_cache_file(self):
-        """Update file with new data"""
+        """Update file with new data."""
         try:
             self._write_json_file(self.cache_file)
             return True
@@ -102,10 +103,10 @@ class Updater(object):
             return False
 
     def _write_json_file(self, filename):
-        """Write current data to file"""
+        """Write current data to file."""
         with open(filename, 'w+') as filehandler:
             filehandler.write(self._get_formatted_data())
 
     def _get_formatted_data(self):
-        """Return json data"""
+        """Return json data."""
         return json.dumps(self.data, indent=4)

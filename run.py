@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""gen new hosts"""
+"""Gen new hosts."""
 from app.db_to_dns import DBtoDns
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-"""Module allow load yaml config to object, accessed by dot
+"""Module allow load yaml config to object, accessed by dot.
 
 Allow create yaml config and load, easy access to childs and data by dots
 like Example:
@@ -11,36 +11,38 @@ import yaml
 
 
 class DotConfig(object):
-    """Config object accessed by dots"""
+    """Config object accessed by dots."""
 
-    def __init__(self, configration):
-        if not isinstance(configration, dict):
+    def __init__(self, configuration):
+        """Init from config from dict."""
+        if not isinstance(configuration, dict):
             raise TypeError("Config should be "
                             "a Dictionary not {}"
-                            .format(configration.__class__))
-        self._cfg = configration
+                            .format(configuration.__class__))
+        self._cfg = configuration
 
     def __getattr__(self, key):
-        """Get from config new DotConfig (if dict) or return by value"""
+        """Get from config new DotConfig (if dict) or return by value."""
         data = self._cfg[key]
         if isinstance(data, dict):
             return DotConfig(data)
         return data
 
     def __str__(self):
+        """Return string representation."""
         return str(self._cfg)
 
     def keys(self):
-        """return keys of inner dict"""
+        """Keys of inner dict."""
         return self._cfg.keys()
 
     def __getitem__(self, item):
+        """Get item by dot."""
         return self._cfg.__getitem__(item)
 
     @classmethod
     def load(cls, filename):
-        """load file from yaml and return loaded DotConfig"""
-
+        """Load file from yaml and return loaded DotConfig."""
         if not os.path.exists(filename):
             raise OSError('File {} does not exists'.format(filename))
         config_yaml = None

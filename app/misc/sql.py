@@ -1,13 +1,14 @@
-"""Sql Connection module store connection options and make querys"""
+"""Sql Connection module store connection options and make querys."""
 # coding: utf-8
 import MySQLdb
 from MySQLdb.cursors import DictCursor
 
 
 class SqlConnection(object):
-    """Store SQL Connection to simplify connecting"""
+    """Store SQL Connection to simplify connecting."""
 
     def __init__(self, **kwargs):
+        """Init from kwargs."""
         self.host = kwargs.get('host')
         self.user = kwargs.get('user')
         self.password = kwargs.get('password')
@@ -16,8 +17,7 @@ class SqlConnection(object):
         self.charset = kwargs.get('charset', 'utf8')
 
     def set_connection_options(self, **kwargs):
-        """set options by kwargs"""
-
+        """Set options by kwargs."""
         self.host = kwargs.get('host')
         self.user = kwargs.get('user')
         self.password = kwargs.get('password')
@@ -26,8 +26,7 @@ class SqlConnection(object):
         self.charset = kwargs.get('charset', 'utf8')
 
     def query(self, query, args=None, **kwargs):
-        """try send query to database with connection options"""
-
+        """Send query to database with connection options."""
         database_connection = MySQLdb.connect(
             host=self.host, user=self.user, passwd=self.password,
             db=self.database, port=self.port, charset='utf8',

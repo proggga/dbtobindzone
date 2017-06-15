@@ -1,4 +1,4 @@
-"""Main application"""
+"""Main application."""
 from app.fetcher.host_data_fetcher import HostDataFetcher
 from app.misc.dot_config import DotConfig
 from app.misc.sql import SqlConnection
@@ -7,9 +7,10 @@ from app.updaters.host_updater import HostUpdater
 
 
 class DBtoDns(object):
-    """Entry point of updater"""
+    """Entry point of updater."""
 
     def __init__(self, config_path):
+        """Init connection and fetchers from config."""
         config = DotConfig.load(config_path)
         self.connection = SqlConnection(**config.connection)
         host_fetcher = HostDataFetcher(self.connection,
@@ -26,16 +27,16 @@ class DBtoDns(object):
                                             cache_dir=config.zone_cache_dir)
 
     def update(self):
-        """update any"""
+        """Update any."""
         self.update_hosts()
         self.update_domains()
 
     def update_hosts(self):
-        """update hosts"""
+        """Update hosts."""
         self.host_updater.refresh_cache()
         print("Hosts:", self.host_updater.data)
 
     def update_domains(self):
-        """update domains"""
+        """Update domains."""
         self.domain_updater.refresh_cache()
         print("Domains:", self.domain_updater.data)

@@ -1,4 +1,4 @@
-"""Testing Data from db fetcher"""
+"""Testing Data from db fetcher."""
 import unittest
 
 from _mysql_exceptions import MySQLError
@@ -7,9 +7,10 @@ import mock
 
 
 class TestDataFetcher(unittest.TestCase):
-    """TestClass for HostDataFetcher"""
+    """TestClass for HostDataFetcher."""
 
     def setUp(self):
+        """Setups TestCase."""
         self.connection = mock.MagicMock()
         self.connection.query.return_value = 'some data'
         self.fetcher = DataFetcher(self.connection)
@@ -17,7 +18,7 @@ class TestDataFetcher(unittest.TestCase):
                                    '.DataFetcher.get_query')
 
     def test_execute_method(self):
-        """test execute working"""
+        """Test execute working."""
         with mock.patch(self.get_query_mockpath) as get_query:
             get_query.return_value = 'SQL-QUERY'
             self.fetcher.execute()
@@ -25,7 +26,7 @@ class TestDataFetcher(unittest.TestCase):
         self.assertEqual(self.fetcher.get_data(), 'some data')
 
     def test_execute_raise_mysqlerror(self):
-        """test execute method  return 'not success'"""
+        """Test execute method  return 'not success'."""
         self.connection.query.side_effect = MySQLError('Some error with query')
         with mock.patch(self.get_query_mockpath) as get_query:
             get_query.return_value = 'SQL-QUERY'
@@ -33,6 +34,6 @@ class TestDataFetcher(unittest.TestCase):
         self.assertFalse(self.fetcher.is_fetch_success())
 
     def test_get_query_not_implented(self):
-        """test get query raise NotImplementedError"""
+        """Test get query raise NotImplementedError."""
         with self.assertRaises(NotImplementedError):
             self.fetcher.get_query()

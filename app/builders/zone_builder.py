@@ -1,4 +1,4 @@
-"""Abstact builder"""
+"""Abstact builder."""
 import re
 
 from app.builders.builder import DnsBuilder
@@ -10,9 +10,10 @@ from app.misc.formatter import Formatter
 
 
 class ZoneBuilder(DnsBuilder):
-    """Zone file builder"""
+    """Zone file builder."""
 
     def __init__(self, zone_name, *args, **kwargs):
+        """Check zone is valid, then init."""
         super(ZoneBuilder, self).__init__(*args, **kwargs)
         ZoneBuilder.check_zone(zone_name)
         self.zone = zone_name
@@ -21,7 +22,7 @@ class ZoneBuilder(DnsBuilder):
         self._aliases_without_ref = {}
 
     def add_record(self, record):
-        """add record to builder"""
+        """Add record to builder."""
         new_record = DotConfig(record)
 
         fqdn = new_record.hostname + '.' + self.zone
@@ -40,7 +41,7 @@ class ZoneBuilder(DnsBuilder):
             self._records[fqdn].add_references(address)
 
     def add_alias(self, alias_record):
-        """add alias to builder"""
+        """Add alias to builder."""
         new_record = DotConfig(alias_record)
         name = new_record.hostname
         refs = new_record.address
@@ -57,7 +58,7 @@ class ZoneBuilder(DnsBuilder):
         return hostname not in self._records
 
     def search_record(self, refs):
-        """Search record in builder"""
+        """Search record in builder."""
         if refs in self._records:
             return self._records[refs]
 
@@ -71,7 +72,7 @@ class ZoneBuilder(DnsBuilder):
                 return result_record
 
     def get_result(self):
-        """return builded product"""
+        """Return builded product."""
         result = '$ORIGIN {}.\n'.format(self.zone)
         for record in self._records.values():
             result += '\n'.join(record.get_zone_file())
@@ -82,7 +83,7 @@ class ZoneBuilder(DnsBuilder):
         return Formatter.sort_str_by_column(result)
 
     def flush_result(self):
-        """Method for clearing builder data"""
+        """Clear builder data."""
         keys = list(self._records.keys())
         for key in keys:
             del self._records[key]
@@ -91,7 +92,7 @@ class ZoneBuilder(DnsBuilder):
 
     @staticmethod
     def check_zone(zone_name):
-        """Check zone for valid (thx for regex StackOverFlow)"""
+        """Check zone for valid (thx for regex StackOverFlow)."""
         if (not re.match(r'^(((?!-))(xn--)?[a-z0-9][a-z0-9-_]'
                          r'{0,61}[a-z0-9]{0,1}\.)?(x--)'
                          r'?([a-z0-9][a-z0-9\-]{0,60}[a-z0-9]|'

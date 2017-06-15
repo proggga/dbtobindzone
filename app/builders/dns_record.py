@@ -1,4 +1,4 @@
-"""Dns Record"""
+"""Dns Record."""
 from app.misc.exceptions import DnsRecordNotFound
 from app.misc.exceptions import InvalidReferencesException
 
@@ -8,9 +8,10 @@ from app.builders.dns_state import HostDnsRecordState
 
 
 class DnsRecord(object):
-    """Dns record class"""
+    """Dns record class."""
 
     def __init__(self, zone, domain_name, references_to):
+        """Init new dnsrecord from name/zone and references_to."""
         if zone.startswith('.'):
             zone = zone[1:]
         if domain_name.endswith(zone):
@@ -22,7 +23,7 @@ class DnsRecord(object):
         self.set_references(references_to)
 
     def set_references(self, new_references):
-        """Set state to self"""
+        """Set state to self."""
         self.references_to = new_references
         if isinstance(new_references, list):
             self.change_state(BalancedHostDnsRecordState())
@@ -34,15 +35,15 @@ class DnsRecord(object):
             raise InvalidReferencesException
 
     def add_references(self, new_references):
-        """add another references_to"""
+        """Add another references_to."""
         self.state.add_references(self, new_references)
 
     def change_state(self, new_state):
-        """Change DnsRecordState"""
+        """Change DnsRecordState."""
         self.state = new_state
 
     def get_zone_file(self):
-        """Get format for zone and childs"""
+        """Get format for zone and childs."""
         result = []
         result_line = str(self)
         if result_line:
@@ -52,7 +53,7 @@ class DnsRecord(object):
         return result
 
     def search(self, domain_name):
-        """Search domain_name in aliases"""
+        """Search domain_name in aliases."""
         if self._domain_is_mine(domain_name):
             return self
         if domain_name in self.aliases:
@@ -68,14 +69,14 @@ class DnsRecord(object):
                 domain_name == self.domain_name)
 
     def add_alias(self, alias_domain_name):
-        """Add alias method"""
+        """Add alias method."""
         alias = DnsRecord(self.zone, alias_domain_name, self)
         if alias.fqdn not in self.aliases:
             self.aliases[alias.fqdn] = alias
         return alias
 
     def add_subdomain(self, subdomain):
-        """Add subdomain as alias method"""
+        """Add subdomain as alias method."""
         alias = DnsRecord(self.zone, subdomain + '.' + self.domain_name, self)
         if alias.fqdn not in self.aliases:
             self.aliases[alias.fqdn] = alias
@@ -83,8 +84,9 @@ class DnsRecord(object):
 
     @property
     def fqdn(self):
-        """Return fqdn"""
+        """Return fqdn."""
         return '.'.join((self.domain_name, self.zone))
 
     def __str__(self):
+        """Return string representation."""
         return self.state.get_string(self)

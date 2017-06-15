@@ -1,11 +1,12 @@
-"""Module with Database fetcher methods"""
+"""Module with Database fetcher methods."""
 from app.fetcher.data_fetcher import DataFetcher
 
 
 class DomainDataFetcher(DataFetcher):
-    """fetcher data from db and return it, also store connectin options"""
+    """fetcher data from db and return it, also store connectin options."""
 
     def __init__(self, connection, tags, **kwargs):
+        """Get data from kwargs."""
         super(DomainDataFetcher, self).__init__(connection)
         self.tags = tags
         self.url_field = kwargs.get('url_field', 'url')
@@ -15,7 +16,7 @@ class DomainDataFetcher(DataFetcher):
         self.domain_table = kwargs.get('domain_table', 'urls')
 
     def get_query(self):
-        """get active domain by hosts db with"""
+        """Get active domain by hosts db with."""
         return ('SELECT {} as url, {} as host, {} as tag from {} as urls {}'
                 .format(self.url_field,
                         self.hostname_field,

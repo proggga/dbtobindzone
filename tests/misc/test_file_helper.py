@@ -1,19 +1,20 @@
-"""FileHelper class test"""
+"""FileHelper class test."""
 import unittest
 
 from app.misc.file_helper import FileHelper
 
 
 class TestFileHelper(unittest.TestCase):
-    """TestCase for FileHelper"""
+    """TestCase for FileHelper."""
 
     def setUp(self):
+        """Setups TestCase."""
         self.file_not_exists = 'file not exists here'
         self.file1 = 'tests/fixtures/fh_file1.txt'
         self.file2 = 'tests/fixtures/fh_file2.txt'
 
     def test_samefiles(self):
-        """test one file, should be same"""
+        """Test one file, should be same."""
         files_same = FileHelper.equal(self.file1, self.file1)
         self.assertTrue(files_same)
 
@@ -21,7 +22,7 @@ class TestFileHelper(unittest.TestCase):
         self.assertFalse(files_same)
 
     def test_diff_files(self):
-        """test two files, should differ"""
+        """Test two files, should differ."""
         files_same = FileHelper.equal(self.file1, self.file2)
         self.assertFalse(files_same)
 
@@ -29,7 +30,7 @@ class TestFileHelper(unittest.TestCase):
         self.assertTrue(files_diff)
 
     def test_not_exists_files(self):
-        """test file which not exists"""
+        """Test file which not exists."""
         with self.assertRaises(EnvironmentError):
             FileHelper.differ(self.file_not_exists, self.file1)
         with self.assertRaises(EnvironmentError):

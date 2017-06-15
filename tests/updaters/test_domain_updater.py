@@ -1,4 +1,4 @@
-""" Test DomainUpdater class with content in files"""
+"""Test DomainUpdater class with content in files."""
 # coding: utf-8
 import json
 import os
@@ -9,9 +9,10 @@ import mock
 
 
 class TestDomainUpdater(unittest.TestCase):
-    """Test domainupdater class"""
+    """Test domainupdater class.."""
 
     def setUp(self):
+        """Setups TestCase."""
         self.domains = ({
             'url': 'site1.example.ru',
             'host': 'server1.dmz',
@@ -43,7 +44,7 @@ class TestDomainUpdater(unittest.TestCase):
                                             cache_dir='tests/test_work_dir/')
 
     def test_domain_cache_update(self):
-        '''test cache created and right format'''
+        """Test cache created and right format."""
         self.domain_updater.refresh_cache()
         self.assertTrue(os.path.exists(self.domain_updater.cache_file))
         content = ''
@@ -52,7 +53,7 @@ class TestDomainUpdater(unittest.TestCase):
         self.assertEqual(json.loads(content), list(self.domains))
 
     def test_create_zone_file(self):
-        """test file zone created with domains"""
+        """Test file zone created with domains.."""
         zone = 'example.ru'
         self.domain_updater.update_zone(zone)
         content = ''
@@ -66,7 +67,7 @@ class TestDomainUpdater(unittest.TestCase):
                                   "CNAME    server3\n")
 
     def test_create_zone_file_ver2(self):
-        """test file zone created with domains"""
+        """Test file zone created with domains.."""
         self.domain_updater.refresh_cache()
         self.assertTrue(os.path.exists(self.domain_updater.cache_file))
         zone = 'example.com'

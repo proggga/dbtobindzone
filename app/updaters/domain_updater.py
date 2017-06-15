@@ -1,17 +1,18 @@
-"""Module with DomainUpdater class"""
+"""Module with DomainUpdater class."""
 from app.updaters.updater import Updater
 
 
 class DomainUpdater(Updater):
-    """Class allow update host by zone"""
+    """Class allow update host by zone."""
 
     def __init__(self, *args, **kwargs):
+        """Init default."""
         super(DomainUpdater, self).__init__(*args, **kwargs)
         self.data = []
         self.prefix = 'domains'
 
     def _format_zone_file_content(self, zone_name, initial_lines=None):
-        """Method which format file content"""
+        """Format file content."""
         lines = list(initial_lines)
         for domain in self.data:
             name = domain['url']

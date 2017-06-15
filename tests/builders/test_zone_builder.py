@@ -1,4 +1,4 @@
-"""ZoneBuilder -> creates file by builder interface"""
+"""ZoneBuilder -> creates file by builder interface."""
 import unittest
 
 from app.builders.zone_builder import ZoneBuilder
@@ -6,22 +6,22 @@ from app.misc.exceptions import InvalidZone
 
 
 class TestZoneBuilderConstandStatic(unittest.TestCase):
-    """Test builder class constructor and static methods"""
+    """Test builder class constructor and static methods."""
 
     def test_constructor_no_args(self):
-        """test contstructor fails without zone name"""
+        """Test contstructor fails without zone name."""
         with self.assertRaises(TypeError):
             ZoneBuilder()  # pylint: disable=no-value-for-parameter
 
     def test_check_zone_bad_zone(self):
-        """test contstructor fails without zone name"""
+        """Test contstructor fails without zone name."""
         with self.assertRaises(InvalidZone):
             ZoneBuilder.check_zone('some zone')
         with self.assertRaises(InvalidZone):
             ZoneBuilder.check_zone('another.one-')
 
     def test_check_zone_good_zone(self):
-        """Test check_zone method
+        """Test check_zone method.
 
         THIS METHODS SHOULD NOT RAISE InvalidZone exception
         """
@@ -33,7 +33,7 @@ class TestZoneBuilderConstandStatic(unittest.TestCase):
             self.fail('InvalidZone catch, it is wrong')  # pragma: no cover
 
     def test_constructor(self):
-        """Test constructor and zone property"""
+        """Test constructor and zone property."""
         zone_name = 'example.com'
         builder = ZoneBuilder(zone_name)
         self.assertTrue(hasattr(builder, 'zone'))
@@ -41,9 +41,10 @@ class TestZoneBuilderConstandStatic(unittest.TestCase):
 
 
 class TestZoneBuilderCase(unittest.TestCase):
-    """Test builder class instanse methods"""
+    """Test builder class instanse methods."""
 
     def setUp(self):
+        """Setups testcase."""
         self.zone = 'example.com'
         self.builder = ZoneBuilder(self.zone)
         self.record_site = {
@@ -68,19 +69,19 @@ class TestZoneBuilderCase(unittest.TestCase):
         }
 
     def test_empty_get_data(self):
-        """Test empty data"""
+        """Test empty data."""
         result = self.builder.get_result()
         self.assertEqual(result, '$ORIGIN    example.com.\n')
 
     def test_add_record(self):
-        """Test add_record method"""
+        """Test add_record method."""
         self.builder.add_record(self.record_site)
         result = self.builder.get_result()
         self.assertEqual(result, '$ORIGIN    example.com.\n'
                                  'site       IN              A    1.2.3.4\n')
 
     def test_flush_data(self):
-        """Test empty data"""
+        """Test empty data."""
         self.builder.add_record(self.record_site)
         result = self.builder.get_result()
         self.assertEqual(result, '$ORIGIN    example.com.\n'
@@ -90,7 +91,7 @@ class TestZoneBuilderCase(unittest.TestCase):
         self.assertEqual(result, '$ORIGIN    example.com.\n')
 
     def test_add_alias_to_non_exist(self):
-        """Add alias to host which not exists in db (may be hardcoded)"""
+        """Add alias to host which not exists in db (may be hardcoded)."""
         self.builder.add_alias(self.alias_site)
         result = self.builder.get_result()
         self.assertEqual(result, '$ORIGIN    example.com.\n'
@@ -98,7 +99,7 @@ class TestZoneBuilderCase(unittest.TestCase):
                                  'CNAME    site\n')
 
     def test_add_alias_to_exist_host(self):
-        """Add alias to host which not exists in db (may be hardcoded)"""
+        """Add alias to host which not exists in db (may be hardcoded)."""
         self.builder.add_record(self.record_site)
         self.builder.add_alias(self.alias_site)
         result = self.builder.get_result()
@@ -109,7 +110,7 @@ class TestZoneBuilderCase(unittest.TestCase):
                                  'site\n')
 
     def test_add_two_records_with_same(self):
-        """Add another ip to same name"""
+        """Add another ip to same name."""
         self.builder.add_record(self.record_site)
         self.builder.add_record(self.record_site_two)
         self.builder.add_record(self.record_site_two)
@@ -121,7 +122,7 @@ class TestZoneBuilderCase(unittest.TestCase):
                                  '8.8.8.8\n')
 
     def test_two_same_aliases(self):
-        """Add alias to host which not exists in db (may be hardcoded)"""
+        """Add alias to host which not exists in db (may be hardcoded)."""
         self.builder.add_record(self.record_site)
         self.builder.add_alias(self.alias_site)
         self.builder.add_alias(self.alias_site)
@@ -133,14 +134,14 @@ class TestZoneBuilderCase(unittest.TestCase):
                                  'site\n')
 
     def test_search_alias(self):
-        """Add alias to host which not exists in db (may be hardcoded)"""
+        """Add alias to host which not exists in db (may be hardcoded)."""
         self.builder.add_record(self.record_site)
         alias_record = self.builder.add_alias(self.alias_site)
         record = self.builder.search_record(self.alias_site['hostname'])
         self.assertEqual(record, alias_record)
 
     def test_two_aliases_wrong_order(self):
-        """Add alias to host which not exists in db (may be hardcoded)"""
+        """Add alias to host which not exists in db (may be hardcoded)."""
         self.builder.add_alias(self.alias_site)
         self.builder.add_record(self.record_site)
         result = self.builder.get_result()

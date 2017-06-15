@@ -1,4 +1,4 @@
-"""Test sql connection module"""
+"""Test sql connection module."""
 import re
 import unittest
 
@@ -8,11 +8,10 @@ import mock
 
 
 class TestSqlConnector(unittest.TestCase):
-    """Test connectior class"""
+    """Test connectior class."""
 
     def test_sql_with_wrong_connection(self):
-        """test sql with wrong options"""
-
+        """Test sql with wrong options."""
         connection = SqlConnection(host='8.8.8.8', user='anon',
                                    password='bad_bass',
                                    port=999, database='nodb')
@@ -23,7 +22,7 @@ class TestSqlConnector(unittest.TestCase):
                                  str(exception)))
 
     def test_sql_connect(self):
-        """test sql connect method (big mock)"""
+        """Test sql connect method (big mock)."""
         connection = SqlConnection(host='8.8.8.8', user='anon',
                                    password='bad_bass',
                                    port=999, database='nodb')
@@ -51,7 +50,7 @@ class TestSqlConnector(unittest.TestCase):
             self.assertEqual(data, ())
 
     def test_set_connection_options(self):
-        """Test method which set new connection options"""
+        """Test method which set new connection options."""
         connection = SqlConnection(host='8.8.8.8', user='anon',
                                    password='bad_bass',
                                    port=999, database='nodb')

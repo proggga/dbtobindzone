@@ -1,18 +1,19 @@
-"""DnsRecord State"""
+"""DnsRecord State."""
 from app.misc.exceptions import ReferenceToNoneException
 
 
 class DnsRecordState(object):
-    """DnsRecordState it is state of DnsRecord"""
+    """DnsRecordState it is state of DnsRecord."""
 
     _instance = None
 
     @classmethod
     def get_name(cls):
-        """Rerturn status name"""
+        """Return status name."""
         return cls.__name__
 
     def __new__(cls):
+        """Allow init only one instance (singleton)."""
         if not cls._instance:
             inst = super(DnsRecordState, cls).__new__(cls)
             cls._instance = inst
@@ -20,20 +21,21 @@ class DnsRecordState(object):
 
     @staticmethod
     def get_string(record):
-        """used by DnsRecord as __str__ method"""
+        """Use by DnsRecord as __str__ method."""
         raise NotImplementedError()
 
     @staticmethod
     def add_references(record, new_references):
-        """used by DnsRecord as add references method"""
+        """Use by DnsRecord as add references method."""
         raise NotImplementedError()
 
 
 class AliasDnsRecordState(DnsRecordState):
-    """AliasDnsRecordState it is state of DnsRecord"""
+    """AliasDnsRecordState it is state of DnsRecord."""
 
     @staticmethod
     def get_string(record):
+        """Get string representation."""
         if not record.references_to:
             raise ReferenceToNoneException()
         return "{} IN CNAME {}".format(record.domain_name,
@@ -41,16 +43,16 @@ class AliasDnsRecordState(DnsRecordState):
 
     @staticmethod
     def add_references(record, new_references):
-        """Add references to alias not implemented"""
+        """Add references to alias not implemented."""
         pass
 
 
 class BalancedHostDnsRecordState(DnsRecordState):
-    """BalancedHostDnsRecordState it is state of DnsRecord"""
+    """BalancedHostDnsRecordState it is state of DnsRecord."""
 
     @staticmethod
     def get_string(record):
-        """Return __str__ content"""
+        """Get string representation."""
         if not record.references_to:
             raise ReferenceToNoneException()
         result = []
@@ -61,17 +63,17 @@ class BalancedHostDnsRecordState(DnsRecordState):
 
     @staticmethod
     def add_references(record, new_references):
-        "add new reference to"
+        """Add new reference to."""
         if new_references not in record.references_to:
             record.references_to.append(new_references)
 
 
 class HostDnsRecordState(DnsRecordState):
-    """HostDnsRecordState it is state of DnsRecord"""
+    """HostDnsRecordState it is state of DnsRecord."""
 
     @staticmethod
     def get_string(record):
-        """Return __str__ content"""
+        """Get string representation."""
         if not record.references_to:
             raise ReferenceToNoneException()
         return "{} IN A {}".format(record.domain_name,
@@ -79,7 +81,7 @@ class HostDnsRecordState(DnsRecordState):
 
     @staticmethod
     def add_references(record, new_references):
-        "add new reference to, switch state"
+        """Add new reference to, switch state."""
         last_address = record.references_to
         record.references_to = [last_address, new_references]
         record.change_state(BalancedHostDnsRecordState())

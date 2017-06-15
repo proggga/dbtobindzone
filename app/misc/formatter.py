@@ -1,4 +1,4 @@
-"""Formatter, helps format by columns"""""
+"""Formatter, helps format by columns."""
 import re
 try:
     # Python 2
@@ -9,11 +9,11 @@ except ImportError:
 
 
 class Formatter(object):
-    """Main formatter class"""
+    """Main formatter class."""
 
     @staticmethod
     def sort_str_by_column(string_to_sort):
-        """Format string method by columns"""
+        """Format string method by columns."""
         lines = string_to_sort.strip().split('\n')
         lines_array_split_by_word = []
         for raw_line in lines:
@@ -25,7 +25,7 @@ class Formatter(object):
 
     @staticmethod
     def sort_by_column(array_of_lines):
-        """Sort lines by column, return str with padding for lines
+        """Sort lines by column, return str with padding for lines.
 
         ex: lines [ ['column1', 'column2'], ['value1', 'value2'] ]
         """
@@ -37,7 +37,7 @@ class Formatter(object):
 
     @staticmethod
     def format_line(max_sizes_by_columns, line):
-        """Format lines with by sizes table"""
+        """Format lines with by sizes table."""
         if not line:
             return '\n'
 
@@ -53,7 +53,7 @@ class Formatter(object):
 
     @staticmethod
     def collect_max_for_column(array_of_lines):
-        """collect max line words by column"""
+        """Collect max line words by column."""
         array_with_sizes_of_words = []
         for line_array in array_of_lines:
             lines_sizes = Formatter.get_words_sizes(line_array)
@@ -65,10 +65,10 @@ class Formatter(object):
 
     @staticmethod
     def get_max_in_matrix(matrix):
-        """Get max by line in matrix"""
+        """Get max by line in matrix."""
         return [max(words) for words in matrix]
 
     @staticmethod
     def get_words_sizes(words_array):
-        """Get word sizes array"""
+        """Get word sizes array."""
         return [len(word) for word in words_array]
